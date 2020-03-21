@@ -14,6 +14,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +53,7 @@ public class UserController {
 
     @ApiOperation("获取用户信息")
     @GetMapping("get")
+    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'user_' + #id")
     public UserVO getUser(@ApiParam(value = "用户ID", required = true) @RequestParam @Valid @NotNull Long id) {
         User user = userService.getById(id);
         UserVO userVo = new UserVO();
@@ -62,6 +67,7 @@ public class UserController {
 
     @ApiOperation("获取所有用户信息")
     @GetMapping("list")
+    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'user_list'")
     public List<UserVO> listUsers() {
         List<User> users = userService.list();
         if (users == null) {
@@ -78,6 +84,7 @@ public class UserController {
 
     @ApiOperation("分页获取所有用户信息")
     @GetMapping("page")
+    // 因为有搜索条件，命中率低，不采用缓存
     public Page<UserVO> pageUsers(@ApiParam(value = "当前页码") @RequestParam(defaultValue = "1") @Valid @NotNull Long current,
                                   @ApiParam(value = "每页数量") @RequestParam(defaultValue = "10") @Valid @NotNull Long size,
                                   @ApiParam(value = "查询条件：用户名") @RequestParam(required = false) @Valid String name) {
@@ -102,6 +109,7 @@ public class UserController {
     @ApiOperation("保存用户信息")
     @PostMapping("save")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @CachePut(value = "demoCache", key = "'user_' + #result.id", condition = "#result.id != 'null'")
     public UserVO saveUser(@ApiParam(value = "用户信息", required = true) @RequestBody @Valid UserVO userVo) {
         User user = new User();
         BeanUtils.copyProperties(userVo, user);
@@ -115,6 +123,7 @@ public class UserController {
     @ApiOperation("更新用户信息")
     @PutMapping("update")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @CachePut(value = "demoCache", key = "'user_' + #result.id")
     public UserVO updateUser(@ApiParam(value = "用户信息", required = true) @RequestBody @Valid UserVO userVo) {
         User user = userService.getById(userVo);
         if (user == null) {
@@ -128,6 +137,12 @@ public class UserController {
     @ApiOperation("删除用户信息")
     @DeleteMapping("remove")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @Caching(
+        evict = {
+            @CacheEvict(value = "demoCache", key = "'user_' + #id", beforeInvocation = false),
+            @CacheEvict(value = "demoCache", key = "'user_list'", beforeInvocation = false)
+        }
+    )
     public Boolean removeUser(@ApiParam(value = "用户ID", required = true) @RequestParam @Valid @NotNull Long id) {
         User user = userService.getById(id);
         UserVO userVo = new UserVO();

@@ -6,7 +6,6 @@ import lombok.ToString;
 /**
  * @author pax
  */
-
 @ToString
 public enum UnifiedCodeEnum {
     //=== 通用错误 ===//
@@ -23,6 +22,7 @@ public enum UnifiedCodeEnum {
     //=== 业务错误 ===//
     // 分门别类，各占一个区间
     USER_NOT_EXIST(-1000, "用户不存在！"),
+    GROUP_NOT_EXIST(-2000, "组不存在！"),
     ;
 
     UnifiedCodeEnum(Integer code, String msg) {

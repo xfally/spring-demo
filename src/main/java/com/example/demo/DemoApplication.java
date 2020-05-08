@@ -13,7 +13,6 @@ import org.springframework.cache.annotation.EnableCaching;
  */
 @EnableSwagger2Doc
 @SpringBootApplication
-@MapperScan(basePackages = "com.example.demo.mapper")
 @EnableCaching
 public class DemoApplication {
 

@@ -12,14 +12,8 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
  */
 public class MybatisPlusGenerator {
     private static final String AUTHOR = "pax";
-    private static final String DS_URL = "jdbc:mysql://localhost:3306/com_example_demo?useUnicode=true&useSSL=false&character_set_server=utf8mb4";
-    private static final String DS_DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
-    private static final String DS_USER_NAME = "root";
-    private static final String DS_PASSWORD = "123456";
-    private static final String PKG_PARENT = "com.example.demo";
-    private static final String[] TABLE_LIST = {"t_user"};
 
-    public static void main(String[] args) {
+    private static void generate(String DS_URL, String DS_DRIVER_NAME, String DS_USER_NAME, String DS_PASSWORD, String PKG_PARENT, String[] TABLE_LIST, String MAPPER_PART) {
         String projectPath = System.getProperty("user.dir");
 
         // 代码生成器
@@ -96,13 +90,13 @@ public class MybatisPlusGenerator {
         // 实体包名
         pc.setEntity("entity");
         // DAO层包名
-        pc.setMapper("mapper");
+        pc.setMapper("mapper." + MAPPER_PART);
         // Service层包名
         pc.setService("service");
         // Service实现层包名
         pc.setServiceImpl("service.impl");
         // XML映射的存储路径（包名）
-        pc.setXml("mapper.xml");
+        pc.setXml("mapper." + MAPPER_PART + ".xml");
         mpg.setPackageInfo(pc);
 
         //=== 模板引擎配置 ===//
@@ -112,5 +106,27 @@ public class MybatisPlusGenerator {
         //mpg.setTemplateEngine(new FreemarkerTemplateEngine());
 
         mpg.execute();
+    }
+
+    public static void main(String[] args) {
+        String DS_URL = "jdbc:mysql://localhost:3306/com_example_demo?useUnicode=true&useSSL=false&character_set_server=utf8mb4";
+        String DS_DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
+        String DS_USER_NAME = "root";
+        String DS_PASSWORD = "123456";
+        String PKG_PARENT = "com.example.demo";
+        String[] TABLE_LIST = {"t_user"};
+        String MAPPER_PART = "ds1";
+
+        generate(DS_URL, DS_DRIVER_NAME, DS_USER_NAME, DS_PASSWORD, PKG_PARENT, TABLE_LIST, MAPPER_PART);
+
+        String DS_URL_2 = "jdbc:postgresql://localhost:5432/com_example_demo";
+        String DS_DRIVER_NAME_2 = "org.postgresql.Driver";
+        String DS_USER_NAME_2 = "postgres";
+        String DS_PASSWORD_2 = "123456";
+        String PKG_PARENT_2 = "com.example.demo";
+        String[] TABLE_LIST_2 = {"t_group"};
+        String MAPPER_PART_2 = "ds2";
+
+        generate(DS_URL_2, DS_DRIVER_NAME_2, DS_USER_NAME_2, DS_PASSWORD_2, PKG_PARENT_2, TABLE_LIST_2, MAPPER_PART_2);
     }
 }

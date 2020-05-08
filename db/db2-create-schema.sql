@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS t_group;
+
+CREATE TABLE t_group (
+  id BIGINT NOT NULL,
+  name VARCHAR(30) NOT NULL,
+  note VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY(id)
+);
+
+COMMENT ON COLUMN t_group.id IS 'ID';
+COMMENT ON COLUMN t_group.name IS '组名';
+COMMENT ON COLUMN t_group.note IS '描述';

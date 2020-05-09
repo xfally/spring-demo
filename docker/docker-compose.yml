@@ -1,0 +1,79 @@
+version: '3'
+services:
+
+  demo-mysql:
+    container_name: demo-mysql
+    image: mysql:latest
+    network_mode: bridge
+    ports:
+      - 3306:3306
+    volumes:
+      - ~/data/docker/mysql/conf.d:/etc/mysql/conf.d
+      - ~/data/docker/mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: '123456'
+      MYSQL_USER: 'test'
+      MYSQL_PASSWORD: '123456'
+    restart: 'no'
+
+  demo-postgres:
+    container_name: demo-postgres
+    image: postgres:10
+    network_mode: bridge
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/data/docker/postgres/data:/var/lib/postgresql/data
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    restart: 'no'
+
+  demo-redis:
+    container_name: demo-redis
+    image: redis:latest
+    network_mode: bridge
+    ports:
+      - 6379:6379
+    restart: 'no'
+
+  demo-rabbitmq:
+    container_name: demo-rabbitmq
+    image: rabbitmq:management
+    hostname: localhost
+    network_mode: bridge
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ~/data/docker/rabbitmq:/var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: 'admin'
+      RABBITMQ_DEFAULT_PASS: 'admin'
+    restart: 'no'
+
+  demo-eureka:
+    container_name: demo-eureka
+    image: pax/eureka:latest
+    network_mode: bridge
+    ports:
+      - 7001:7001
+    restart: 'no'
+
+  demo-spring:
+    container_name: demo-spring
+    image: pax/demo:latest
+    network_mode: bridge
+    ports:
+      - 8080:8080
+    volumes:
+      - ~/data/docker/spring-demo/config:/config
+    restart: 'no'
+    depends_on:
+      - demo-mysql
+      - demo-postgres
+      - demo-redis
+      - demo-rabbitmq
+      - demo-eureka
+

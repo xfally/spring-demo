@@ -10,6 +10,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
+ * 数据源AOP。根据DAO请求不同，使用不同的数据源
+ *
  * @author pax
  */
 @Component

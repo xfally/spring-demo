@@ -12,6 +12,12 @@ import org.springframework.web.servlet.ModelAndView;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * 主页
+ *
+ * @author pax
+ * @since 2020-05-09
+ */
 @Api(tags = {"主页"})
 @Controller
 @RequestMapping("/")

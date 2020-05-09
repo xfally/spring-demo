@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
+ * 认证过滤器
+ * <p>
  * 关于认证的设计建议：
  * <p>
  * 过滤器Filter和拦截器Interceptor都提供集中式的认证配置。

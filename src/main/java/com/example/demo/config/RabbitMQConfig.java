@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * RabbitMQ消息队列配置
+ *
  * @author pax
  */
 @Configuration

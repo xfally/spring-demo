@@ -11,6 +11,8 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
+ * WebSocket服务实现
+ *
  * @author pax
  */
 @Service

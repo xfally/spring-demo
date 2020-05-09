@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 /**
+ * 统一返回处理
+ *
  * @author pax
  */
 @ControllerAdvice(annotations = UnifiedResponse.class)

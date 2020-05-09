@@ -1,6 +1,8 @@
 package com.example.demo.common.response;
 
 /**
+ * 统一返回构建工厂
+ *
  * @author pax
  */
 public class UnifiedResponseFactory {

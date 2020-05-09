@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
 /**
+ * 统一日志AOP
+ *
  * @author pax
  */
 @Component

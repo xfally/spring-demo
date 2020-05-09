@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 
 /**
+ * MybatisPlus提供的Dao及Service自动生成器
+ *
  * @author pax
  */
 public class MybatisPlusGenerator {

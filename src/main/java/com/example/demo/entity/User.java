@@ -13,9 +13,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * <p>
  * User对象
- * </p>
  *
  * @author pax
  * @since 2020-03-19

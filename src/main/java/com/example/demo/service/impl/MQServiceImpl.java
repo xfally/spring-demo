@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 
 /**
+ * 消息队列服务实现
+ *
  * @author pax
  */
 @Service

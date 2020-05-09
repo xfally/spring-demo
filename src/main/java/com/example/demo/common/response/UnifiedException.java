@@ -3,6 +3,8 @@ package com.example.demo.common.response;
 import lombok.Getter;
 
 /**
+ * 统一异常
+ *
  * @author pax
  */
 public class UnifiedException extends RuntimeException {

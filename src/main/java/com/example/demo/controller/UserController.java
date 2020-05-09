@@ -30,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 用户信息
  * <p>
  * 前端控制器
  * </p>
@@ -38,7 +39,8 @@ import java.util.List;
  * 如果觉得影响性能，可不给类注解，只给部分方法加事务注解。
  * <p>
  * 不用`@Controller`，而是用`@RestController`注解修饰类后，
- * 则所有的方法默认都返回JSON格式（即被`@ResponseBody`注解的效果）。
+ * 则所有的方法默认都返回JSON，XML或自定义mediaType内容到页面（即被`@ResponseBody`注解的效果），
+ * 至于具体是哪种，MessageConverter接口的实现类会根据返回内容灵活判断。
  *
  * @author pax
  * @since 2020-03-19

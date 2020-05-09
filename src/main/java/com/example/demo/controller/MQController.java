@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 /**
+ * 消息队列
+ *
  * @author pax
  */
 @Api(tags = {"消息队列"})

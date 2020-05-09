@@ -1,6 +1,8 @@
 package com.example.demo.config;
 
 /**
+ * 存放当前的数据源值
+ *
  * @author pax
  */
 public class DataSourceContextHolder {

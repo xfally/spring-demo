@@ -30,9 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * <p>
- *  前端控制器
- * </p>
+ * 组信息
  *
  * @author pax
  * @since 2020-05-08

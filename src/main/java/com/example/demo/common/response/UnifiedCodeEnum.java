@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
+ * 统一错误码
+ *
  * @author pax
  */
 @ToString

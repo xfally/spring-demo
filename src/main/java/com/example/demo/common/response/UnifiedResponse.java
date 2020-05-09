@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 统一返回标识
+ *
  * @author pax
  */
 @Retention(RetentionPolicy.RUNTIME)

@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
+ * 定义各种数据源值
+ *
  * @author pax
  */
 @ToString

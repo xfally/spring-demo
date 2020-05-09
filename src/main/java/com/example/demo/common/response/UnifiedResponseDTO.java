@@ -5,6 +5,8 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
+ * 统一返回DTO
+ *
  * @author pax
  */
 @Data

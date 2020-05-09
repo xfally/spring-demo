@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * MybatisPlus配置
+ *
  * @author pax
  */
 @Configuration

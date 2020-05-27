@@ -3,6 +3,7 @@ package com.example.demo.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.demo.common.helper.Group4UpdateAction;
 import com.example.demo.common.response.UnifiedCodeEnum;
 import com.example.demo.common.response.UnifiedException;
 import com.example.demo.common.response.UnifiedResponse;
@@ -21,6 +22,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -116,7 +118,7 @@ public class GroupController {
     @PutMapping("update")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'group_' + #result.id")
-    public GroupVO updateGroup(@ApiParam(value = "组信息", required = true) @RequestBody @Valid GroupVO groupVo) {
+    public GroupVO updateGroup(@ApiParam(value = "组信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) GroupVO groupVo) {
         Group group = groupService.getById(groupVo);
         if (group == null) {
             throw new UnifiedException(UnifiedCodeEnum.GROUP_NOT_EXIST, groupVo);

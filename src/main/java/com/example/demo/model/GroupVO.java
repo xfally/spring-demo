@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-import com.example.demo.common.helper.GroupsUpdate;
+import com.example.demo.common.helper.Group4UpdateAction;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,7 +21,7 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class GroupVO implements Serializable {
     @ApiModelProperty("组ID")
-    @NotNull(message = "执行更新操作时，ID不可为空", groups = GroupsUpdate.class)
+    @NotNull(message = "执行更新操作时，ID不可为空", groups = Group4UpdateAction.class)
     private Long id;
 
     @ApiModelProperty("组名")

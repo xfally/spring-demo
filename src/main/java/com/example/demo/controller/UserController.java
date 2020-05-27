@@ -3,6 +3,7 @@ package com.example.demo.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.demo.common.helper.Group4UpdateAction;
 import com.example.demo.common.response.UnifiedCodeEnum;
 import com.example.demo.common.response.UnifiedException;
 import com.example.demo.common.response.UnifiedResponse;
@@ -21,6 +22,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -126,7 +128,7 @@ public class UserController {
     @PutMapping("update")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'user_' + #result.id")
-    public UserVO updateUser(@ApiParam(value = "用户信息", required = true) @RequestBody @Valid UserVO userVo) {
+    public UserVO updateUser(@ApiParam(value = "用户信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) UserVO userVo) {
         User user = userService.getById(userVo);
         if (user == null) {
             throw new UnifiedException(UnifiedCodeEnum.USER_NOT_EXIST, userVo);

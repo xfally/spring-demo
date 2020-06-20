@@ -3,7 +3,7 @@ services:
 
   demo-mysql:
     container_name: demo-mysql
-    image: mysql:latest
+    image: mysql:8
     network_mode: bridge
     ports:
       - 3306:3306
@@ -55,7 +55,7 @@ services:
 
   demo-eureka:
     container_name: demo-eureka
-    image: pax/eureka:latest
+    image: xfally/eureka:latest
     network_mode: bridge
     ports:
       - 7001:7001
@@ -63,7 +63,7 @@ services:
 
   demo-spring:
     container_name: demo-spring
-    image: pax/demo:latest
+    image: xfally/demo:latest
     network_mode: bridge
     ports:
       - 8080:8080

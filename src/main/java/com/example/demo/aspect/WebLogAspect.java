@@ -22,7 +22,7 @@ import java.util.Arrays;
 @Aspect
 @Slf4j
 public class WebLogAspect {
-    private ThreadLocal<Long> startTime = new ThreadLocal<>();
+    private final ThreadLocal<Long> startTime = new ThreadLocal<>();
 
     @Pointcut("execution(* com.example.demo.controller.*.*(..))")
     public void webLog() {

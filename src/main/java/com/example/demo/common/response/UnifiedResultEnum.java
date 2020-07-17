@@ -21,5 +21,5 @@ public enum UnifiedResultEnum {
     }
 
     @Getter
-    private Boolean result;
+    private final Boolean result;
 }

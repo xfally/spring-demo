@@ -11,5 +11,5 @@ public interface IMQService {
      *
      * @param msg 消息
      */
-    public void sendMsg(String msg);
+    void sendMsg(String msg);
 }

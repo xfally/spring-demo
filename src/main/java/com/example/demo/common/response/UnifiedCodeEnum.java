@@ -54,7 +54,7 @@ public enum UnifiedCodeEnum {
     }
 
     @Getter
-    private String code;
+    private final String code;
     @Getter
-    private String msg;
+    private final String msg;
 }

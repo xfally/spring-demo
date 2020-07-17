@@ -17,7 +17,7 @@ public enum DataSourceEnum {
     DS2("ds2");
 
     @Getter
-    private String value;
+    private final String value;
 
     DataSourceEnum(String value) {
         this.value = value;

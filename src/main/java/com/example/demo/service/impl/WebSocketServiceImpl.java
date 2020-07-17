@@ -20,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Slf4j
 public class WebSocketServiceImpl {
     private static int onlineCount = 0;
-    private static CopyOnWriteArraySet<Session> sessions = new CopyOnWriteArraySet<>();
+    private static final CopyOnWriteArraySet<Session> sessions = new CopyOnWriteArraySet<>();
 
     private Session session;
     private String address;

@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Customer;
+import com.example.demo.dao.ds1.entity.Customer;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

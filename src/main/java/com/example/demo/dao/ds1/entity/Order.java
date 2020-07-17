@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.dao.ds1.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -13,27 +13,35 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * 产品DO
+ * 订单DO
  *
  * @author pax
  * @since 2020-03-19
  */
-@ApiModel(value = "产品DO", description = "")
+@ApiModel(value = "订单DO", description = "")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("t_product")
-public class Product implements Serializable {
+@TableName("t_order")
+public class Order implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "产品ID")
+    @ApiModelProperty(value = "订单ID")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "产品名")
-    @TableField("name")
-    private String name;
+    @ApiModelProperty(value = "客户ID")
+    @TableField("customer_id")
+    private Long customerId;
+
+    @ApiModelProperty(value = "产品ID")
+    @TableField("product_id")
+    private Long productId;
+
+    @ApiModelProperty(value = "购买数量")
+    @TableField("quantity")
+    private Integer quantity;
 
     @ApiModelProperty(value = "描述")
     @TableField("note")

@@ -23,7 +23,7 @@ import java.util.Map;
  * @author pax
  */
 @Configuration
-@MapperScan("com.example.demo.mapper")
+@MapperScan("com.example.demo.dao")
 public class MybatisPlusConfig {
 
     @Bean

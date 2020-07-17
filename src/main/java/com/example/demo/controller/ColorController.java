@@ -7,7 +7,7 @@ import com.example.demo.common.helper.Group4UpdateAction;
 import com.example.demo.common.response.UnifiedCodeEnum;
 import com.example.demo.common.response.UnifiedException;
 import com.example.demo.common.response.UnifiedResponse;
-import com.example.demo.entity.Color;
+import com.example.demo.dao.ds2.entity.Color;
 import com.example.demo.model.ColorVO;
 import com.example.demo.service.IColorService;
 import io.swagger.annotations.Api;

@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.dao.ds1.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

@@ -89,16 +89,16 @@ public class MybatisPlusGenerator {
         //pc.setModuleName("xxx");
         // Controller层包名
         pc.setController("controller");
-        // 实体包名
-        pc.setEntity("entity");
-        // DAO层包名
-        pc.setMapper("mapper." + MAPPER_PART);
         // Service层包名
         pc.setService("service");
         // Service实现层包名
         pc.setServiceImpl("service.impl");
+        // DAO层包名
+        pc.setMapper("dao." + MAPPER_PART + ".mapper");
         // XML映射的存储路径（包名）
-        pc.setXml("mapper." + MAPPER_PART + ".xml");
+        pc.setXml("dao." + MAPPER_PART + ".mapper.xml");
+        // 实体包名
+        pc.setEntity("dao." + MAPPER_PART + ".entity");
         mpg.setPackageInfo(pc);
 
         //=== 模板引擎配置 ===//

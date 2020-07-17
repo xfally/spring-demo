@@ -1,8 +1,8 @@
 package com.example.demo.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.demo.entity.Color;
-import com.example.demo.mapper.ds2.ColorMapper;
+import com.example.demo.dao.ds2.entity.Color;
+import com.example.demo.dao.ds2.mapper.ColorMapper;
 import com.example.demo.service.IColorService;
 import org.springframework.stereotype.Service;
 

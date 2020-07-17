@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Color;
+import com.example.demo.dao.ds2.entity.Color;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

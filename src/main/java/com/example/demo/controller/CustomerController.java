@@ -7,7 +7,7 @@ import com.example.demo.common.helper.Group4UpdateAction;
 import com.example.demo.common.response.UnifiedCodeEnum;
 import com.example.demo.common.response.UnifiedException;
 import com.example.demo.common.response.UnifiedResponse;
-import com.example.demo.entity.Customer;
+import com.example.demo.dao.ds1.entity.Customer;
 import com.example.demo.model.CustomerVO;
 import com.example.demo.service.ICustomerService;
 import io.swagger.annotations.Api;

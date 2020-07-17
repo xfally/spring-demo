@@ -1,6 +1,5 @@
-package com.example.demo.entity;
+package com.example.demo.dao.ds2.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -13,35 +12,27 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * 订单DO
+ * 颜色DO
  *
  * @author pax
- * @since 2020-03-19
+ * @since 2020-05-08
  */
-@ApiModel(value = "订单DO", description = "")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("t_order")
-public class Order implements Serializable {
+@TableName("t_color")
+@ApiModel(value = "颜色DO", description = "")
+public class Color implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "订单ID")
-    @TableId(value = "id", type = IdType.AUTO)
+    @ApiModelProperty(value = "颜色ID")
+    @TableId("id")
     private Long id;
 
-    @ApiModelProperty(value = "客户ID")
-    @TableField("customer_id")
-    private Long customerId;
-
-    @ApiModelProperty(value = "产品ID")
-    @TableField("product_id")
-    private Long productId;
-
-    @ApiModelProperty(value = "购买数量")
-    @TableField("quantity")
-    private Integer quantity;
+    @ApiModelProperty(value = "颜色名")
+    @TableField("name")
+    private String name;
 
     @ApiModelProperty(value = "描述")
     @TableField("note")

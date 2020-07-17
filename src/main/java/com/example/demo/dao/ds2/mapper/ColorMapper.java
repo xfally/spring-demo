@@ -1,7 +1,7 @@
-package com.example.demo.mapper.ds2;
+package com.example.demo.dao.ds2.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.demo.entity.Color;
+import com.example.demo.dao.ds2.entity.Color;
 
 /**
  * <p>

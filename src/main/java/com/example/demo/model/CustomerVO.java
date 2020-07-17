@@ -1,17 +1,22 @@
 package com.example.demo.model;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.helper.Group4UpdateAction;
+import com.example.demo.dao.ds1.entity.Customer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 客户VO
@@ -41,4 +46,36 @@ public class CustomerVO implements Serializable {
 
     @ApiModelProperty("描述")
     private String note;
+
+    public static Page<CustomerVO> of(Page<Customer> page) {
+        if (page == null) {
+            return new Page<>();
+        }
+        List<CustomerVO> customerVOList = page.getRecords()
+            .stream()
+            .map(CustomerVO::of)
+            .collect(Collectors.toList());
+        Page<CustomerVO> pageOut = new Page<>();
+        BeanUtils.copyProperties(page, pageOut);
+        pageOut.setRecords(customerVOList);
+        return pageOut;
+    }
+
+    public static CustomerVO of(Customer customer) {
+        if (customer == null) {
+            return null;
+        }
+        CustomerVO customerVO = new CustomerVO();
+        BeanUtils.copyProperties(customer, customerVO);
+        return customerVO;
+    }
+
+    public static Customer of(CustomerVO customerVO) {
+        if (customerVO == null) {
+            return null;
+        }
+        Customer customer = new Customer();
+        BeanUtils.copyProperties(customerVO, customer);
+        return customer;
+    }
 }

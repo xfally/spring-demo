@@ -14,7 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -29,8 +28,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 颜色信息
@@ -51,13 +50,10 @@ public class ColorController {
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'color_' + #id")
     public ColorVO getColor(@ApiParam(value = "颜色ID", required = true) @RequestParam @Valid @NotNull Long id) {
         Color color = colorService.getById(id);
-        ColorVO colorVO = new ColorVO();
         if (color == null) {
-            colorVO.setId(id);
             throw new UnifiedException(UnifiedCodeEnum.B1004, id);
         }
-        BeanUtils.copyProperties(color, colorVO);
-        return colorVO;
+        return ColorVO.of(color);
     }
 
     @ApiOperation("获取所有颜色信息")
@@ -68,13 +64,10 @@ public class ColorController {
         if (colors == null) {
             return new ArrayList<>();
         }
-        List<ColorVO> colorVOList = new LinkedList<>();
-        for (Color color : colors) {
-            ColorVO colorVO = new ColorVO();
-            BeanUtils.copyProperties(color, colorVO);
-            colorVOList.add(colorVO);
-        }
-        return colorVOList;
+        return colors
+            .stream()
+            .map(ColorVO::of)
+            .collect(Collectors.toList());
     }
 
     @ApiOperation("分页获取所有颜色信息")
@@ -88,19 +81,7 @@ public class ColorController {
             lambdaQueryWrapper.like(Color::getName, name);
         }
         Page<Color> page = colorService.page(new Page<>(current, size), lambdaQueryWrapper);
-        if (page == null) {
-            return new Page<>();
-        }
-        List<ColorVO> colorVOList = new LinkedList<>();
-        for (Color color : page.getRecords()) {
-            ColorVO colorVO = new ColorVO();
-            BeanUtils.copyProperties(color, colorVO);
-            colorVOList.add(colorVO);
-        }
-        Page<ColorVO> pageOut = new Page<>();
-        BeanUtils.copyProperties(page, pageOut);
-        pageOut.setRecords(colorVOList);
-        return pageOut;
+        return ColorVO.of(page);
     }
 
     @ApiOperation("保存颜色信息")
@@ -108,8 +89,7 @@ public class ColorController {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'color_' + #result.id", condition = "#result.id != 'null'")
     public ColorVO saveColor(@ApiParam(value = "颜色信息", required = true) @RequestBody @Valid ColorVO colorVO) {
-        Color color = new Color();
-        BeanUtils.copyProperties(colorVO, color);
+        Color color = ColorVO.of(colorVO);
         colorService.save(color);
         // 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;
@@ -122,12 +102,11 @@ public class ColorController {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'color_' + #result.id")
     public ColorVO updateColor(@ApiParam(value = "颜色信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) ColorVO colorVO) {
-        Color color = colorService.getById(colorVO);
+        Color color = colorService.getById(colorVO.getId());
         if (color == null) {
-            throw new UnifiedException(UnifiedCodeEnum.B1004, colorVO);
+            throw new UnifiedException(UnifiedCodeEnum.B1004, colorVO.getId());
         }
-        BeanUtils.copyProperties(colorVO, color);
-        colorService.updateById(color);
+        colorService.updateById(ColorVO.of(colorVO));
         return colorVO;
     }
 

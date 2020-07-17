@@ -14,7 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -29,8 +28,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 客户信息
@@ -61,13 +60,10 @@ public class CustomerController {
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'customer_' + #id")
     public CustomerVO getCustomer(@ApiParam(value = "客户ID", required = true) @RequestParam @Valid @NotNull Long id) {
         Customer customer = customerService.getById(id);
-        CustomerVO customerVO = new CustomerVO();
         if (customer == null) {
-            customerVO.setId(id);
             throw new UnifiedException(UnifiedCodeEnum.B1001, id);
         }
-        BeanUtils.copyProperties(customer, customerVO);
-        return customerVO;
+        return CustomerVO.of(customer);
     }
 
     @ApiOperation("获取所有客户信息")
@@ -78,13 +74,10 @@ public class CustomerController {
         if (customers == null) {
             return new ArrayList<>();
         }
-        List<CustomerVO> customerVOList = new LinkedList<>();
-        for (Customer customer : customers) {
-            CustomerVO customerVO = new CustomerVO();
-            BeanUtils.copyProperties(customer, customerVO);
-            customerVOList.add(customerVO);
-        }
-        return customerVOList;
+        return customers
+            .stream()
+            .map(CustomerVO::of)
+            .collect(Collectors.toList());
     }
 
     @ApiOperation("分页获取所有客户信息")
@@ -98,19 +91,7 @@ public class CustomerController {
             lambdaQueryWrapper.like(Customer::getName, name);
         }
         Page<Customer> page = customerService.page(new Page<>(current, size), lambdaQueryWrapper);
-        if (page == null) {
-            return new Page<>();
-        }
-        List<CustomerVO> customerVOList = new LinkedList<>();
-        for (Customer customer : page.getRecords()) {
-            CustomerVO customerVO = new CustomerVO();
-            BeanUtils.copyProperties(customer, customerVO);
-            customerVOList.add(customerVO);
-        }
-        Page<CustomerVO> pageOut = new Page<>();
-        BeanUtils.copyProperties(page, pageOut);
-        pageOut.setRecords(customerVOList);
-        return pageOut;
+        return CustomerVO.of(page);
     }
 
     @ApiOperation("保存客户信息")
@@ -118,8 +99,7 @@ public class CustomerController {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'customer_' + #result.id", condition = "#result.id != 'null'")
     public CustomerVO saveCustomer(@ApiParam(value = "客户信息", required = true) @RequestBody @Valid CustomerVO customerVO) {
-        Customer customer = new Customer();
-        BeanUtils.copyProperties(customerVO, customer);
+        Customer customer = CustomerVO.of(customerVO);
         customerService.save(customer);
         // TEST: 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;
@@ -132,12 +112,11 @@ public class CustomerController {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'customer_' + #result.id")
     public CustomerVO updateCustomer(@ApiParam(value = "客户信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) CustomerVO customerVO) {
-        Customer customer = customerService.getById(customerVO);
+        Customer customer = customerService.getById(customerVO.getId());
         if (customer == null) {
-            throw new UnifiedException(UnifiedCodeEnum.B1001, customerVO);
+            throw new UnifiedException(UnifiedCodeEnum.B1001, customerVO.getId());
         }
-        BeanUtils.copyProperties(customerVO, customer);
-        customerService.updateById(customer);
+        customerService.updateById(CustomerVO.of(customerVO));
         return customerVO;
     }
 

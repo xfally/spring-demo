@@ -1,15 +1,20 @@
 package com.example.demo.model;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.helper.Group4UpdateAction;
+import com.example.demo.dao.ds1.entity.Product;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 产品VO
@@ -31,4 +36,36 @@ public class ProductVO implements Serializable {
 
     @ApiModelProperty("描述")
     private String note;
+
+    public static Page<ProductVO> of(Page<Product> page) {
+        if (page == null) {
+            return new Page<>();
+        }
+        List<ProductVO> productVOList = page.getRecords()
+            .stream()
+            .map(ProductVO::of)
+            .collect(Collectors.toList());
+        Page<ProductVO> pageOut = new Page<>();
+        BeanUtils.copyProperties(page, pageOut);
+        pageOut.setRecords(productVOList);
+        return pageOut;
+    }
+
+    public static ProductVO of(Product product) {
+        if (product == null) {
+            return null;
+        }
+        ProductVO productVO = new ProductVO();
+        BeanUtils.copyProperties(product, productVO);
+        return productVO;
+    }
+
+    public static Product of(ProductVO productVO) {
+        if (productVO == null) {
+            return null;
+        }
+        Product product = new Product();
+        BeanUtils.copyProperties(productVO, product);
+        return product;
+    }
 }

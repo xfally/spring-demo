@@ -13,7 +13,6 @@ import com.example.demo.service.IOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -28,8 +27,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 订单信息
@@ -50,13 +49,10 @@ public class OrderController {
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'order_' + #id")
     public OrderVO getOrder(@ApiParam(value = "订单ID", required = true) @RequestParam @Valid @NotNull Long id) {
         Order order = orderService.getById(id);
-        OrderVO orderVO = new OrderVO();
         if (order == null) {
-            orderVO.setId(id);
             throw new UnifiedException(UnifiedCodeEnum.B1003, id);
         }
-        BeanUtils.copyProperties(order, orderVO);
-        return orderVO;
+        return OrderVO.of(order);
     }
 
     @ApiOperation("获取所有订单信息")
@@ -67,13 +63,10 @@ public class OrderController {
         if (orders == null) {
             return new ArrayList<>();
         }
-        List<OrderVO> orderVOList = new LinkedList<>();
-        for (Order order : orders) {
-            OrderVO orderVO = new OrderVO();
-            BeanUtils.copyProperties(order, orderVO);
-            orderVOList.add(orderVO);
-        }
-        return orderVOList;
+        return orders
+            .stream()
+            .map(OrderVO::of)
+            .collect(Collectors.toList());
     }
 
     @ApiOperation("分页获取所有订单信息")
@@ -82,19 +75,7 @@ public class OrderController {
     public Page<OrderVO> pageOrders(@ApiParam(value = "当前页码") @RequestParam(defaultValue = "1") @Valid @NotNull Long current,
                                     @ApiParam(value = "每页数量") @RequestParam(defaultValue = "10") @Valid @NotNull Long size) {
         Page<Order> page = orderService.page(new Page<>(current, size));
-        if (page == null) {
-            return new Page<>();
-        }
-        List<OrderVO> orderVOList = new LinkedList<>();
-        for (Order order : page.getRecords()) {
-            OrderVO orderVO = new OrderVO();
-            BeanUtils.copyProperties(order, orderVO);
-            orderVOList.add(orderVO);
-        }
-        Page<OrderVO> pageOut = new Page<>();
-        BeanUtils.copyProperties(page, pageOut);
-        pageOut.setRecords(orderVOList);
-        return pageOut;
+        return OrderVO.of(page);
     }
 
     @ApiOperation("保存订单信息")
@@ -102,8 +83,7 @@ public class OrderController {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'order_' + #result.id", condition = "#result.id != 'null'")
     public OrderVO saveOrder(@ApiParam(value = "订单信息", required = true) @RequestBody @Validated(Group4AddAction.class) OrderVO orderVO) {
-        Order order = new Order();
-        BeanUtils.copyProperties(orderVO, order);
+        Order order = OrderVO.of(orderVO);
         orderService.save(order);
         // TEST: 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;
@@ -116,9 +96,9 @@ public class OrderController {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'order_' + #result.id")
     public OrderVO updateOrder(@ApiParam(value = "订单信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) OrderVO orderVO) {
-        Order order = orderService.getById(orderVO);
+        Order order = orderService.getById(orderVO.getId());
         if (order == null) {
-            throw new UnifiedException(UnifiedCodeEnum.B1003, orderVO);
+            throw new UnifiedException(UnifiedCodeEnum.B1003, orderVO.getId());
         }
         if (orderVO.getCustomerId() == null) {
             orderVO.setCustomerId(order.getCustomerId());
@@ -126,8 +106,7 @@ public class OrderController {
         if (orderVO.getProductId() == null) {
             orderVO.setProductId(order.getProductId());
         }
-        BeanUtils.copyProperties(orderVO, order);
-        orderService.updateById(order);
+        orderService.updateById(OrderVO.of(orderVO));
         return orderVO;
     }
 

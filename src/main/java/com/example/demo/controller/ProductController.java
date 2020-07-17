@@ -14,7 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -29,8 +28,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 产品信息
@@ -51,13 +50,10 @@ public class ProductController {
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'product_' + #id")
     public ProductVO getProduct(@ApiParam(value = "产品ID", required = true) @RequestParam @Valid @NotNull Long id) {
         Product product = productService.getById(id);
-        ProductVO productVO = new ProductVO();
         if (product == null) {
-            productVO.setId(id);
             throw new UnifiedException(UnifiedCodeEnum.B1002, id);
         }
-        BeanUtils.copyProperties(product, productVO);
-        return productVO;
+        return ProductVO.of(product);
     }
 
     @ApiOperation("获取所有产品信息")
@@ -68,13 +64,10 @@ public class ProductController {
         if (products == null) {
             return new ArrayList<>();
         }
-        List<ProductVO> productVOList = new LinkedList<>();
-        for (Product product : products) {
-            ProductVO productVO = new ProductVO();
-            BeanUtils.copyProperties(product, productVO);
-            productVOList.add(productVO);
-        }
-        return productVOList;
+        return products
+            .stream()
+            .map(ProductVO::of)
+            .collect(Collectors.toList());
     }
 
     @ApiOperation("分页获取所有产品信息")
@@ -88,19 +81,7 @@ public class ProductController {
             lambdaQueryWrapper.like(Product::getName, name);
         }
         Page<Product> page = productService.page(new Page<>(current, size), lambdaQueryWrapper);
-        if (page == null) {
-            return new Page<>();
-        }
-        List<ProductVO> productVOList = new LinkedList<>();
-        for (Product product : page.getRecords()) {
-            ProductVO productVO = new ProductVO();
-            BeanUtils.copyProperties(product, productVO);
-            productVOList.add(productVO);
-        }
-        Page<ProductVO> pageOut = new Page<>();
-        BeanUtils.copyProperties(page, pageOut);
-        pageOut.setRecords(productVOList);
-        return pageOut;
+        return ProductVO.of(page);
     }
 
     @ApiOperation("保存产品信息")
@@ -108,8 +89,7 @@ public class ProductController {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'product_' + #result.id", condition = "#result.id != 'null'")
     public ProductVO saveProduct(@ApiParam(value = "产品信息", required = true) @RequestBody @Valid ProductVO productVO) {
-        Product product = new Product();
-        BeanUtils.copyProperties(productVO, product);
+        Product product = ProductVO.of(productVO);
         productService.save(product);
         // TEST: 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;
@@ -122,12 +102,11 @@ public class ProductController {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'product_' + #result.id")
     public ProductVO updateProduct(@ApiParam(value = "产品信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) ProductVO productVO) {
-        Product product = productService.getById(productVO);
+        Product product = productService.getById(productVO.getId());
         if (product == null) {
-            throw new UnifiedException(UnifiedCodeEnum.B1002, productVO);
+            throw new UnifiedException(UnifiedCodeEnum.B1002, productVO.getId());
         }
-        BeanUtils.copyProperties(productVO, product);
-        productService.updateById(product);
+        productService.updateById(ProductVO.of(productVO));
         return productVO;
     }
 

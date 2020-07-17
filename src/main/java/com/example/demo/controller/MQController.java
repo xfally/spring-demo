@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.example.demo.common.response.UnifiedResponse;
-import com.example.demo.model.MsgVo;
+import com.example.demo.model.MsgVO;
 import com.example.demo.service.IMQService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,10 +30,10 @@ public class MQController {
 
     @ApiOperation("发送消息")
     @PostMapping("/send")
-    public MsgVo sendMsg(@ApiParam(value = "消息", required = true) @RequestBody @Valid MsgVo msgVo) {
-        String msg = JSON.toJSONString(msgVo);
+    public MsgVO sendMsg(@ApiParam(value = "消息", required = true) @RequestBody @Valid MsgVO msgVO) {
+        String msg = JSON.toJSONString(msgVO);
         rabbitMQService.sendMsg(msg);
-        return msgVo;
+        return msgVO;
     }
 
 }

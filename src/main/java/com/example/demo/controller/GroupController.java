@@ -50,13 +50,13 @@ public class GroupController {
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'group_' + #id")
     public GroupVO getGroup(@ApiParam(value = "组ID", required = true) @RequestParam @Valid @NotNull Long id) {
         Group group = groupService.getById(id);
-        GroupVO groupVo = new GroupVO();
+        GroupVO groupVO = new GroupVO();
         if (group == null) {
-            groupVo.setId(id);
+            groupVO.setId(id);
             throw new UnifiedException(UnifiedCodeEnum.B1002, id);
         }
-        BeanUtils.copyProperties(group, groupVo);
-        return groupVo;
+        BeanUtils.copyProperties(group, groupVO);
+        return groupVO;
     }
 
     @ApiOperation("获取所有组信息")
@@ -69,9 +69,9 @@ public class GroupController {
         }
         List<GroupVO> groupVOList = new LinkedList<>();
         for (Group group : groups) {
-            GroupVO groupVo = new GroupVO();
-            BeanUtils.copyProperties(group, groupVo);
-            groupVOList.add(groupVo);
+            GroupVO groupVO = new GroupVO();
+            BeanUtils.copyProperties(group, groupVO);
+            groupVOList.add(groupVO);
         }
         return groupVOList;
     }
@@ -90,9 +90,9 @@ public class GroupController {
         }
         List<GroupVO> groupVOList = new LinkedList<>();
         for (Group group : page.getRecords()) {
-            GroupVO groupVo = new GroupVO();
-            BeanUtils.copyProperties(group, groupVo);
-            groupVOList.add(groupVo);
+            GroupVO groupVO = new GroupVO();
+            BeanUtils.copyProperties(group, groupVO);
+            groupVOList.add(groupVO);
         }
         Page<GroupVO> pageOut = new Page<>();
         BeanUtils.copyProperties(page, pageOut);
@@ -104,28 +104,28 @@ public class GroupController {
     @PostMapping("save")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'group_' + #result.id", condition = "#result.id != 'null'")
-    public GroupVO saveGroup(@ApiParam(value = "组信息", required = true) @RequestBody @Valid GroupVO groupVo) {
+    public GroupVO saveGroup(@ApiParam(value = "组信息", required = true) @RequestBody @Valid GroupVO groupVO) {
         Group group = new Group();
-        BeanUtils.copyProperties(groupVo, group);
+        BeanUtils.copyProperties(groupVO, group);
         groupService.save(group);
         // 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;
-        groupVo.setId(group.getId());
-        return groupVo;
+        groupVO.setId(group.getId());
+        return groupVO;
     }
 
     @ApiOperation("更新组信息")
     @PutMapping("update")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'group_' + #result.id")
-    public GroupVO updateGroup(@ApiParam(value = "组信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) GroupVO groupVo) {
-        Group group = groupService.getById(groupVo);
+    public GroupVO updateGroup(@ApiParam(value = "组信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) GroupVO groupVO) {
+        Group group = groupService.getById(groupVO);
         if (group == null) {
-            throw new UnifiedException(UnifiedCodeEnum.B1002, groupVo);
+            throw new UnifiedException(UnifiedCodeEnum.B1002, groupVO);
         }
-        BeanUtils.copyProperties(groupVo, group);
+        BeanUtils.copyProperties(groupVO, group);
         groupService.updateById(group);
-        return groupVo;
+        return groupVO;
     }
 
     @ApiOperation("删除组信息")
@@ -139,9 +139,9 @@ public class GroupController {
     )
     public Boolean removeGroup(@ApiParam(value = "组ID", required = true) @RequestParam @Valid @NotNull Long id) {
         Group group = groupService.getById(id);
-        GroupVO groupVo = new GroupVO();
+        GroupVO groupVO = new GroupVO();
         if (group == null) {
-            groupVo.setId(id);
+            groupVO.setId(id);
             throw new UnifiedException(UnifiedCodeEnum.B1002, id);
         }
         return groupService.removeById(id);

@@ -60,13 +60,13 @@ public class UserController {
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'user_' + #id")
     public UserVO getUser(@ApiParam(value = "用户ID", required = true) @RequestParam @Valid @NotNull Long id) {
         User user = userService.getById(id);
-        UserVO userVo = new UserVO();
+        UserVO userVO = new UserVO();
         if (user == null) {
-            userVo.setId(id);
+            userVO.setId(id);
             throw new UnifiedException(UnifiedCodeEnum.B1001, id);
         }
-        BeanUtils.copyProperties(user, userVo);
-        return userVo;
+        BeanUtils.copyProperties(user, userVO);
+        return userVO;
     }
 
     @ApiOperation("获取所有用户信息")
@@ -79,9 +79,9 @@ public class UserController {
         }
         List<UserVO> userVOList = new LinkedList<>();
         for (User user : users) {
-            UserVO userVo = new UserVO();
-            BeanUtils.copyProperties(user, userVo);
-            userVOList.add(userVo);
+            UserVO userVO = new UserVO();
+            BeanUtils.copyProperties(user, userVO);
+            userVOList.add(userVO);
         }
         return userVOList;
     }
@@ -100,9 +100,9 @@ public class UserController {
         }
         List<UserVO> userVOList = new LinkedList<>();
         for (User user : page.getRecords()) {
-            UserVO userVo = new UserVO();
-            BeanUtils.copyProperties(user, userVo);
-            userVOList.add(userVo);
+            UserVO userVO = new UserVO();
+            BeanUtils.copyProperties(user, userVO);
+            userVOList.add(userVO);
         }
         Page<UserVO> pageOut = new Page<>();
         BeanUtils.copyProperties(page, pageOut);
@@ -114,28 +114,28 @@ public class UserController {
     @PostMapping("save")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'user_' + #result.id", condition = "#result.id != 'null'")
-    public UserVO saveUser(@ApiParam(value = "用户信息", required = true) @RequestBody @Valid UserVO userVo) {
+    public UserVO saveUser(@ApiParam(value = "用户信息", required = true) @RequestBody @Valid UserVO userVO) {
         User user = new User();
-        BeanUtils.copyProperties(userVo, user);
+        BeanUtils.copyProperties(userVO, user);
         userService.save(user);
         // 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;
-        userVo.setId(user.getId());
-        return userVo;
+        userVO.setId(user.getId());
+        return userVO;
     }
 
     @ApiOperation("更新用户信息")
     @PutMapping("update")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'user_' + #result.id")
-    public UserVO updateUser(@ApiParam(value = "用户信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) UserVO userVo) {
-        User user = userService.getById(userVo);
+    public UserVO updateUser(@ApiParam(value = "用户信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) UserVO userVO) {
+        User user = userService.getById(userVO);
         if (user == null) {
-            throw new UnifiedException(UnifiedCodeEnum.B1001, userVo);
+            throw new UnifiedException(UnifiedCodeEnum.B1001, userVO);
         }
-        BeanUtils.copyProperties(userVo, user);
+        BeanUtils.copyProperties(userVO, user);
         userService.updateById(user);
-        return userVo;
+        return userVO;
     }
 
     @ApiOperation("删除用户信息")
@@ -149,9 +149,9 @@ public class UserController {
     )
     public Boolean removeUser(@ApiParam(value = "用户ID", required = true) @RequestParam @Valid @NotNull Long id) {
         User user = userService.getById(id);
-        UserVO userVo = new UserVO();
+        UserVO userVO = new UserVO();
         if (user == null) {
-            userVo.setId(id);
+            userVO.setId(id);
             throw new UnifiedException(UnifiedCodeEnum.B1001, id);
         }
         return userService.removeById(id);

@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class MsgVo {
+public class MsgVO {
     @ApiModelProperty("消息内容")
     @NotNull(message = "消息内容不可为null")
     private String content;

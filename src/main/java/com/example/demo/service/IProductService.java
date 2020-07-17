@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.demo.common.model.UnifiedPage;
 import com.example.demo.common.model.UnifiedQuery;
 import com.example.demo.dao.ds1.entity.ProductDO;
@@ -13,7 +12,7 @@ import java.util.List;
  * @author pax
  * @since 2020-03-19
  */
-public interface IProductService extends IService<ProductDO> {
+public interface IProductService {
     ProductDO getProduct(Long id);
 
     List<ProductDO> listProducts();

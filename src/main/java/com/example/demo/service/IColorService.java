@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.demo.common.model.UnifiedPage;
 import com.example.demo.common.model.UnifiedQuery;
 import com.example.demo.dao.ds2.entity.ColorDO;
@@ -13,7 +12,7 @@ import java.util.List;
  * @author pax
  * @since 2020-05-08
  */
-public interface IColorService extends IService<ColorDO> {
+public interface IColorService {
     ColorDO getColor(Long id);
 
     List<ColorDO> listColors();

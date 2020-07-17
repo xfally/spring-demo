@@ -1,18 +1,20 @@
 package com.example.demo.service.impl;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.common.model.UnifiedCodeEnum;
 import com.example.demo.common.model.UnifiedPage;
 import com.example.demo.common.model.UnifiedQuery;
 import com.example.demo.common.response.UnifiedException;
 import com.example.demo.dao.ds1.entity.OrderDO;
-import com.example.demo.dao.ds1.mapper.OrderMapper;
+import com.example.demo.dao.ds1.repository.OrderRepository;
 import com.example.demo.service.IOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,8 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 订单信息服务实现类
@@ -30,33 +32,37 @@ import java.util.List;
  * @since 2020-05-08
  */
 @Service
-public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderDO> implements IOrderService {
+public class OrderServiceImpl implements IOrderService {
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Override
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'order_' + #id")
     public OrderDO getOrder(@Valid @NotNull Long id) {
-        OrderDO orderDO = getById(id);
-        if (orderDO == null) {
+        Optional<OrderDO> optionalOrderDO = orderRepository.findById(id);
+        if (!optionalOrderDO.isPresent()) {
             throw new UnifiedException(UnifiedCodeEnum.B1003, id);
         }
-        return orderDO;
+        return optionalOrderDO.get();
     }
 
     @Override
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'order_list'")
     public List<OrderDO> listOrders() {
-        List<OrderDO> orderDOList = list();
-        if (orderDOList == null) {
-            return new ArrayList<>();
-        }
-        return orderDOList;
+        return orderRepository.findAll();
     }
 
     @Override
     // 因为有搜索条件，命中率低，不采用缓存
     public UnifiedPage<OrderDO> queryOrders(UnifiedQuery unifiedQuery) {
-        Page<OrderDO> page = page(new Page<>(unifiedQuery.getCurrent(), unifiedQuery.getSize()));
-        return UnifiedPage.ofMbp(page);
+        if (unifiedQuery.getCurrent() <= 0) {
+            unifiedQuery.setCurrent(1);
+        }
+        Pageable pageable = PageRequest.of(unifiedQuery.getCurrent() - 1, unifiedQuery.getSize());
+        Page<OrderDO> page = orderRepository.findAll(pageable);
+        UnifiedPage<OrderDO> unifiedPage = UnifiedPage.ofJpa(page);
+        unifiedPage.setCurrent(unifiedPage.getCurrent() + 1);
+        return unifiedPage;
     }
 
     @Override
@@ -68,7 +74,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderDO> implemen
     )
     @CachePut(value = "demoCache", key = "'order_' + #result.id", condition = "#result.id != 'null'")
     public OrderDO saveOrder(OrderDO orderDO) {
-        save(orderDO);
+        orderDO.setId(null);
+        orderDO = orderRepository.save(orderDO);
         // 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;
         return orderDO;
@@ -83,17 +90,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderDO> implemen
     )
     @CachePut(value = "demoCache", key = "'order_' + #result.id")
     public OrderDO updateOrder(OrderDO orderDO) {
-        OrderDO orderDO1 = getById(orderDO.getId());
-        if (orderDO1 == null) {
+        Optional<OrderDO> optionalOrderDO = orderRepository.findById(orderDO.getId());
+        if (!optionalOrderDO.isPresent()) {
             throw new UnifiedException(UnifiedCodeEnum.B1003, orderDO.getId());
         }
+        OrderDO orderDO1 = optionalOrderDO.get();
         if (orderDO.getCustomerId() == null) {
             orderDO.setCustomerId(orderDO1.getCustomerId());
         }
         if (orderDO.getProductId() == null) {
             orderDO.setProductId(orderDO1.getProductId());
         }
-        updateById(orderDO);
+        orderRepository.save(orderDO);
         return orderDO;
     }
 
@@ -106,11 +114,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderDO> implemen
         }
     )
     public Boolean removeOrder(Long id) {
-        OrderDO orderDO = getById(id);
-        if (orderDO == null) {
+        if (!orderRepository.existsById(id)) {
             throw new UnifiedException(UnifiedCodeEnum.B1003, id);
         }
-        return removeById(id);
+        orderRepository.deleteById(id);
+        return true;
     }
 
 }

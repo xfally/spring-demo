@@ -1,20 +1,22 @@
 package com.example.demo.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.common.model.UnifiedCodeEnum;
 import com.example.demo.common.model.UnifiedPage;
 import com.example.demo.common.model.UnifiedQuery;
 import com.example.demo.common.response.UnifiedException;
 import com.example.demo.dao.ds1.entity.ProductDO;
-import com.example.demo.dao.ds1.mapper.ProductMapper;
+import com.example.demo.dao.ds1.repository.ProductRepository;
 import com.example.demo.service.IProductService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,8 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 产品信息服务实现类
@@ -32,42 +34,46 @@ import java.util.List;
  * @since 2020-05-08
  */
 @Service
-public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductDO> implements IProductService {
+public class ProductServiceImpl implements IProductService {
+    @Autowired
+    private ProductRepository productRepository;
 
     @Override
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'product_' + #id")
     public ProductDO getProduct(@Valid @NotNull Long id) {
-        ProductDO productDO = getById(id);
-        if (productDO == null) {
+        Optional<ProductDO> optionalProductDO = productRepository.findById(id);
+        if (!optionalProductDO.isPresent()) {
             throw new UnifiedException(UnifiedCodeEnum.B1002, id);
         }
-        return productDO;
+        return optionalProductDO.get();
     }
 
     @Override
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'product_list'")
     public List<ProductDO> listProducts() {
-        List<ProductDO> productDOList = list();
-        if (productDOList == null) {
-            return new ArrayList<>();
-        }
-        return productDOList;
+        return productRepository.findAll();
     }
 
     @Override
     // 因为有搜索条件，命中率低，不采用缓存
     public UnifiedPage<ProductDO> queryProducts(UnifiedQuery unifiedQuery,
                                                 String name) {
-        LambdaQueryWrapper<ProductDO> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        if (!StringUtils.isBlank(name)) {
-            if (unifiedQuery.getEqual()) {
-                lambdaQueryWrapper.eq(ProductDO::getName, name);
-            } else {
-                lambdaQueryWrapper.like(ProductDO::getName, name);
-            }
+        if (unifiedQuery.getCurrent() <= 0) {
+            unifiedQuery.setCurrent(1);
         }
-        Page<ProductDO> page = page(new Page<>(unifiedQuery.getCurrent(), unifiedQuery.getSize()), lambdaQueryWrapper);
-        return UnifiedPage.ofMbp(page);
+        Pageable pageable = PageRequest.of(unifiedQuery.getCurrent() - 1, unifiedQuery.getSize());
+        Page<ProductDO> page;
+        if (!StringUtils.isBlank(name)) {
+            ProductDO productDO = new ProductDO();
+            productDO.setName(name);
+            Example<ProductDO> example = Example.of(productDO);
+            page = productRepository.findAll(example, pageable);
+        } else {
+            page = productRepository.findAll(pageable);
+        }
+        UnifiedPage<ProductDO> unifiedPage = UnifiedPage.ofJpa(page);
+        unifiedPage.setCurrent(unifiedPage.getCurrent() + 1);
+        return unifiedPage;
     }
 
     @Override
@@ -79,7 +85,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductDO> im
     )
     @CachePut(value = "demoCache", key = "'product_' + #result.id", condition = "#result.id != 'null'")
     public ProductDO saveProduct(ProductDO productDO) {
-        save(productDO);
+        productDO.setId(null);
+        productDO = productRepository.save(productDO);
         // 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;
         return productDO;
@@ -94,10 +101,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductDO> im
     )
     @CachePut(value = "demoCache", key = "'product_' + #result.id")
     public ProductDO updateProduct(ProductDO productDO) {
-        if (getById(productDO.getId()) == null) {
+        if (!productRepository.existsById(productDO.getId())) {
             throw new UnifiedException(UnifiedCodeEnum.B1002, productDO.getId());
         }
-        updateById(productDO);
+        productRepository.save(productDO);
         return productDO;
     }
 
@@ -110,11 +117,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductDO> im
         }
     )
     public Boolean removeProduct(Long id) {
-        ProductDO productDO = getById(id);
-        if (productDO == null) {
+        if (!productRepository.existsById(id)) {
             throw new UnifiedException(UnifiedCodeEnum.B1002, id);
         }
-        return removeById(id);
+        productRepository.deleteById(id);
+        return true;
     }
 
 }

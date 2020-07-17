@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * Group对象
+ * 颜色DO
  *
  * @author pax
  * @since 2020-05-08
@@ -20,23 +20,22 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("t_group")
-@ApiModel(value = "Group对象", description = "")
-public class Group implements Serializable {
+@TableName("t_color")
+@ApiModel(value = "颜色DO", description = "")
+public class Color implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "ID")
+    @ApiModelProperty(value = "颜色ID")
     @TableId("id")
     private Long id;
 
-    @ApiModelProperty(value = "组名")
+    @ApiModelProperty(value = "颜色名")
     @TableField("name")
     private String name;
 
     @ApiModelProperty(value = "描述")
     @TableField("note")
     private String note;
-
 
 }

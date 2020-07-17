@@ -13,38 +13,38 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * User对象
+ * 客户DO
  *
  * @author pax
  * @since 2020-03-19
  */
-@ApiModel(value = "User对象", description = "")
+@ApiModel(value = "客户DO", description = "")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("t_user")
-public class User implements Serializable {
+@TableName("t_customer")
+public class Customer implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 一般来说，数据库的id字段设置了`AUTO_INCREMENT`（当不指定），那么此处自动生成的注解是`IdType.AUTO`。
-     * Java空间User实体的id为`null`或任意数值（将被忽略），存入数据库时都会采用自动增长的id，比如`1，2，3，4...`等。
+     * Java空间的实体id为`null`或任意数值（将被忽略），存入数据库时都会采用自动增长的id，比如`1，2，3，4...`等。
      * <p>
      * 如果想生成分布式全局唯一id，可以采用“雪花算法”，此处设置`IdType.ASSIGN_ID`即可实现。
-     * Java空间的User实体的id必须为`null`，那么存入数据库中的id就如`1242739154052345858`。
-     * 如果User实体的id为其他具体数值，将直接使用该值，“雪花算法”失效。
+     * Java空间的实体id必须为`null`，那么存入数据库中的id就如`1242739154052345858`。
+     * 如果实体id为其他具体数值，将直接使用该值，“雪花算法”失效。
      * 更多参考：https://mp.baomidou.com/guide/annotation.html#tableid
      */
-    @ApiModelProperty(value = "ID")
+    @ApiModelProperty(value = "客户ID")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "姓名")
+    @ApiModelProperty(value = "客户名")
     @TableField("name")
     private String name;
 
-    @ApiModelProperty(value = "年龄")
+    @ApiModelProperty(value = "客户年龄")
     @TableField("age")
     private Integer age;
 

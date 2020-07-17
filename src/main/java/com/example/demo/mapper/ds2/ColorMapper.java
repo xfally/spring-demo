@@ -1,7 +1,7 @@
 package com.example.demo.mapper.ds2;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.demo.entity.Group;
+import com.example.demo.entity.Color;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.example.demo.entity.Group;
  * @author pax
  * @since 2020-05-08
  */
-public interface GroupMapper extends BaseMapper<Group> {
+public interface ColorMapper extends BaseMapper<Color> {
 
 }

@@ -1,9 +1,9 @@
 package com.example.demo.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.demo.entity.User;
-import com.example.demo.mapper.ds1.UserMapper;
-import com.example.demo.service.IUserService;
+import com.example.demo.entity.Product;
+import com.example.demo.mapper.ds1.ProductMapper;
+import com.example.demo.service.IProductService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-03-19
  */
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements IProductService {
     //some custom method...
 }

@@ -9,11 +9,11 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotNull;
 
 /**
- * Msg info
+ * 消息VO
  *
  * @author pax
  */
-@ApiModel("消息")
+@ApiModel("消息VO")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)

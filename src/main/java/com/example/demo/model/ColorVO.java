@@ -7,27 +7,28 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * Group info
+ * 颜色VO
  *
  * @author pax
  */
-@ApiModel("组信息")
+@ApiModel("颜色VO")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class GroupVO implements Serializable {
-    @ApiModelProperty("组ID")
-    @NotNull(message = "执行更新操作时，ID不可为空", groups = Group4UpdateAction.class)
+public class ColorVO implements Serializable {
+    @ApiModelProperty("颜色ID")
+    @NotNull(message = "执行更新操作时，ID不可为NULL", groups = Group4UpdateAction.class)
     private Long id;
 
-    @ApiModelProperty("组名")
-    @NotNull(message = "组名不可为null")
+    @ApiModelProperty("颜色名")
+    @NotBlank(message = "颜色名不可为空")
     private String name;
 
-    @ApiModelProperty("组描述")
+    @ApiModelProperty("描述")
     private String note;
 }

@@ -15,6 +15,6 @@ public class AuthInterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // TODO: 这里`addPathPatterns`可以传入数组，我们可以在yml/properties中定义需要过滤的path。
-        registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/user/*", "/group/*");
+        registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/customer/*", "/product/*", "/order/*", "/color/*");
     }
 }

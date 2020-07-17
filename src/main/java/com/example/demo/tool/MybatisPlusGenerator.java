@@ -116,7 +116,7 @@ public class MybatisPlusGenerator {
         String DS_USER_NAME = "root";
         String DS_PASSWORD = "123456";
         String PKG_PARENT = "com.example.demo";
-        String[] TABLE_LIST = {"t_user"};
+        String[] TABLE_LIST = {"t_customer", "t_product", "t_order"};
         String MAPPER_PART = "ds1";
 
         generate(DS_URL, DS_DRIVER_NAME, DS_USER_NAME, DS_PASSWORD, PKG_PARENT, TABLE_LIST, MAPPER_PART);
@@ -126,7 +126,7 @@ public class MybatisPlusGenerator {
         String DS_USER_NAME_2 = "postgres";
         String DS_PASSWORD_2 = "123456";
         String PKG_PARENT_2 = "com.example.demo";
-        String[] TABLE_LIST_2 = {"t_group"};
+        String[] TABLE_LIST_2 = {"t_color"};
         String MAPPER_PART_2 = "ds2";
 
         generate(DS_URL_2, DS_DRIVER_NAME_2, DS_USER_NAME_2, DS_PASSWORD_2, PKG_PARENT_2, TABLE_LIST_2, MAPPER_PART_2);

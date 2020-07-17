@@ -1,12 +1,12 @@
-DROP TABLE IF EXISTS t_group;
+DROP TABLE IF EXISTS t_color;
 
-CREATE TABLE t_group (
+CREATE TABLE t_color (
   id BIGINT NOT NULL,
   name VARCHAR(30) NOT NULL,
   note VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY(id)
 );
 
-COMMENT ON COLUMN t_group.id IS 'ID';
-COMMENT ON COLUMN t_group.name IS '组名';
-COMMENT ON COLUMN t_group.note IS '描述';
+COMMENT ON COLUMN t_color.id IS '颜色ID';
+COMMENT ON COLUMN t_color.name IS '颜色名';
+COMMENT ON COLUMN t_color.note IS '描述';

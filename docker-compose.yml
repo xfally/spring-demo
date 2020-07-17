@@ -2,14 +2,14 @@ version: '3'
 services:
 
   demo-mysql:
-    container_name: demo-mysql
-    image: mysql:8
+    container_name: demo-mysql-3306
+    image: mysql:8.0.21
     network_mode: bridge
     ports:
       - 3306:3306
     volumes:
-      - ~/data/docker/mysql/conf.d:/etc/mysql/conf.d
-      - ~/data/docker/mysql/data:/var/lib/mysql
+      - ~/data/docker/mysql-3306/conf.d:/etc/mysql/conf.d
+      - ~/data/docker/mysql-3306/data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: '123456'
       MYSQL_USER: 'test'
@@ -17,13 +17,13 @@ services:
     restart: 'no'
 
   demo-postgres:
-    container_name: demo-postgres
-    image: postgres:10
+    container_name: demo-postgres-5432
+    image: postgres:10.13
     network_mode: bridge
     ports:
       - 5432:5432
     volumes:
-      - ~/data/docker/postgres/data:/var/lib/postgresql/data
+      - ~/data/docker/postgres-5432/data:/var/lib/postgresql/data
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_USER: postgres
@@ -31,15 +31,15 @@ services:
     restart: 'no'
 
   demo-redis:
-    container_name: demo-redis
-    image: redis:latest
+    container_name: demo-redis-6379
+    image: redis:6.0.5
     network_mode: bridge
     ports:
       - 6379:6379
     restart: 'no'
 
   demo-rabbitmq:
-    container_name: demo-rabbitmq
+    container_name: demo-rabbitmq-5672
     image: rabbitmq:management
     hostname: localhost
     network_mode: bridge
@@ -47,14 +47,14 @@ services:
       - 5672:5672
       - 15672:15672
     volumes:
-      - ~/data/docker/rabbitmq:/var/lib/rabbitmq
+      - ~/data/docker/rabbitmq-5672:/var/lib/rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: 'admin'
       RABBITMQ_DEFAULT_PASS: 'admin'
     restart: 'no'
 
   demo-eureka:
-    container_name: demo-eureka
+    container_name: demo-eureka-7001
     image: xfally/eureka:latest
     network_mode: bridge
     ports:
@@ -62,13 +62,13 @@ services:
     restart: 'no'
 
   demo-spring:
-    container_name: demo-spring
+    container_name: demo-spring-8080
     image: xfally/demo:latest
     network_mode: bridge
     ports:
       - 8080:8080
     volumes:
-      - ~/data/docker/spring-demo/config:/config
+      - ~/data/docker/spring-demo-8080/config:/config
     restart: 'no'
     depends_on:
       - demo-mysql

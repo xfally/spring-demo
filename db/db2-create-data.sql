@@ -1,8 +1,9 @@
-DELETE FROM t_group;
+DELETE FROM t_color;
 
-INSERT INTO t_group (id, name, note) VALUES
-(1, 'Group1', 'group1@baomidou.com'),
-(2, 'Group2', 'group2@baomidou.com'),
-(3, 'Group3', 'group3@baomidou.com'),
-(4, 'Group4', 'group4@baomidou.com'),
-(5, 'Group5', 'group5@baomidou.com');
+INSERT INTO t_color (id, name, note) VALUES
+(1, 'Red', 'Like Red...'),
+(2, 'Yellow', 'Like Yellow...'),
+(3, 'Blue', 'Like Blue...'),
+(4, 'Green', 'Like Green...'),
+(5, 'White', 'Like White...'),
+(6, 'Black', 'Like Black...');

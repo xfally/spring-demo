@@ -6,6 +6,14 @@
 
 拉取maven依赖后，执行mvn命令或使用idea直接运行即可。
 
+常用命令有：
+
+- `mvn clean`：清理项目
+- `mvn compile`：编译项目
+- `mvn package`：编译项目并打jar包
+- `mvn install`：部署jar包到本地maven仓库，构建docker镜像到本地（可用`docker images`查看生成的镜像）
+- `mvn deploy`（暂不支持）：推送jar包到远程maven仓库，推送docker镜像到远程registry
+
 ## 目录说明
 
 ```
@@ -68,4 +76,5 @@
 2. 本项目采用Mybatis-Plus映射ORM，可运行`tool/MybatisPlusGenerator.java`自动生产DAO层以及相关业务代码（controller、service、mapper、entity...）；
 3. 当项目规模增大后，可以考虑按功能模块拆分，每个模块都包含controller、service、DAO等；（注意此时需要将“第3点”产生的文件，手动移动到对应模块的包路径下）
 4. 当项目规模非常大时，则应考虑拆分为多个微服务；（注意此时需考虑数据库分库或共享问题）
-
+5. 本项目给了多数据源如何配置连接的示例，如db1、db2，通常业务不会涉及这种场景，可删除db2与相关aspect拦截配置。
+6. 本项目默认启用了redis查询结果缓存（application.properties中可设置自动过期时间），结果可能是脏数据。对于实时性要求很高的项目，需要减小自动过期时间、手动清理脏数据、或关闭缓存。

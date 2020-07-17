@@ -48,7 +48,7 @@ public class UnifiedExceptionHandlerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public UnifiedResponseDTO<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage(), e);
-        return UnifiedResponseFactory.createFail(UnifiedCodeEnum.ARG_ERROR, e.getMessage());
+        return UnifiedResponseFactory.createFail(UnifiedCodeEnum.A0400, e.getMessage());
     }
 
     /**

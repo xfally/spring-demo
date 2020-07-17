@@ -63,7 +63,7 @@ public class UserController {
         UserVO userVo = new UserVO();
         if (user == null) {
             userVo.setId(id);
-            throw new UnifiedException(UnifiedCodeEnum.USER_NOT_EXIST, id);
+            throw new UnifiedException(UnifiedCodeEnum.B1001, id);
         }
         BeanUtils.copyProperties(user, userVo);
         return userVo;
@@ -131,7 +131,7 @@ public class UserController {
     public UserVO updateUser(@ApiParam(value = "用户信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) UserVO userVo) {
         User user = userService.getById(userVo);
         if (user == null) {
-            throw new UnifiedException(UnifiedCodeEnum.USER_NOT_EXIST, userVo);
+            throw new UnifiedException(UnifiedCodeEnum.B1001, userVo);
         }
         BeanUtils.copyProperties(userVo, user);
         userService.updateById(user);
@@ -152,7 +152,7 @@ public class UserController {
         UserVO userVo = new UserVO();
         if (user == null) {
             userVo.setId(id);
-            throw new UnifiedException(UnifiedCodeEnum.USER_NOT_EXIST, id);
+            throw new UnifiedException(UnifiedCodeEnum.B1001, id);
         }
         return userService.removeById(id);
     }

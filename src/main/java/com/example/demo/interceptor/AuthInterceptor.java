@@ -46,7 +46,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         log.debug("URL={}", request.getRequestURL().toString());
         String token = request.getHeader(AUTH_HEADER);
         if (StringUtils.isBlank(token)) {
-            throw new UnifiedException(UnifiedCodeEnum.AUTH_LACK_ERROR, AUTH_HEADER);
+            throw new UnifiedException(UnifiedCodeEnum.A0220, AUTH_HEADER);
         }
 
         // TODO: 向内部checkToken控制器方法，或外部统一认证服务，验证此token
@@ -54,7 +54,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         // 认证失败
         if (!ok) {
-            throw new UnifiedException(UnifiedCodeEnum.AUTH_FAIL_ERROR, token);
+            throw new UnifiedException(UnifiedCodeEnum.A0220, token);
         }
         return true;
     }

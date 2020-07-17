@@ -53,7 +53,7 @@ public class GroupController {
         GroupVO groupVo = new GroupVO();
         if (group == null) {
             groupVo.setId(id);
-            throw new UnifiedException(UnifiedCodeEnum.GROUP_NOT_EXIST, id);
+            throw new UnifiedException(UnifiedCodeEnum.B1002, id);
         }
         BeanUtils.copyProperties(group, groupVo);
         return groupVo;
@@ -80,8 +80,8 @@ public class GroupController {
     @GetMapping("page")
     // 因为有搜索条件，命中率低，不采用缓存
     public Page<GroupVO> pageGroups(@ApiParam(value = "当前页码") @RequestParam(defaultValue = "1") @Valid @NotNull Long current,
-                                  @ApiParam(value = "每页数量") @RequestParam(defaultValue = "10") @Valid @NotNull Long size,
-                                  @ApiParam(value = "查询条件：组名") @RequestParam(required = false) @Valid String name) {
+                                    @ApiParam(value = "每页数量") @RequestParam(defaultValue = "10") @Valid @NotNull Long size,
+                                    @ApiParam(value = "查询条件：组名") @RequestParam(required = false) @Valid String name) {
         LambdaQueryWrapper<Group> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.like(Group::getName, name);
         Page<Group> page = groupService.page(new Page<>(current, size), lambdaQueryWrapper);
@@ -121,7 +121,7 @@ public class GroupController {
     public GroupVO updateGroup(@ApiParam(value = "组信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) GroupVO groupVo) {
         Group group = groupService.getById(groupVo);
         if (group == null) {
-            throw new UnifiedException(UnifiedCodeEnum.GROUP_NOT_EXIST, groupVo);
+            throw new UnifiedException(UnifiedCodeEnum.B1002, groupVo);
         }
         BeanUtils.copyProperties(groupVo, group);
         groupService.updateById(group);
@@ -142,7 +142,7 @@ public class GroupController {
         GroupVO groupVo = new GroupVO();
         if (group == null) {
             groupVo.setId(id);
-            throw new UnifiedException(UnifiedCodeEnum.GROUP_NOT_EXIST, id);
+            throw new UnifiedException(UnifiedCodeEnum.B1002, id);
         }
         return groupService.removeById(id);
     }

@@ -37,7 +37,7 @@ public class UnifiedResponseFactory {
         return createResponse(UnifiedResultEnum.FAIL.getResult(), unifiedCodeEnum.getCode(), unifiedCodeEnum.getMsg(), data);
     }
 
-    public static <T> UnifiedResponseDTO<T> createResponse(Boolean result, Integer code, String msg, T data) {
+    public static <T> UnifiedResponseDTO<T> createResponse(Boolean result, String code, String msg, T data) {
         UnifiedResponseDTO<T> unifiedResponseDTO = new UnifiedResponseDTO<>();
         unifiedResponseDTO.setResult(result);
         unifiedResponseDTO.setCode(code);

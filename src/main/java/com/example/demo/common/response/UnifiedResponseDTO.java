@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 public class UnifiedResponseDTO<T> implements Serializable {
     private Boolean result;
-    private Integer code;
+    private String code;
     private String msg;
     private T data;
     private Long timestamp;

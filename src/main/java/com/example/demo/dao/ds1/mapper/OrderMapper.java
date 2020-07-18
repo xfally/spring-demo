@@ -1,7 +1,7 @@
 package com.example.demo.dao.ds1.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.demo.dao.ds1.entity.Order;
+import com.example.demo.dao.ds1.entity.OrderDO;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.example.demo.dao.ds1.entity.Order;
  * @author pax
  * @since 2020-03-19
  */
-public interface OrderMapper extends BaseMapper<Order> {
+public interface OrderMapper extends BaseMapper<OrderDO> {
 
 }

@@ -2,7 +2,7 @@ package com.example.demo.model;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.helper.Group4UpdateAction;
-import com.example.demo.dao.ds2.entity.Color;
+import com.example.demo.dao.ds2.entity.ColorDO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -37,7 +37,7 @@ public class ColorVO implements Serializable {
     @ApiModelProperty("描述")
     private String note;
 
-    public static Page<ColorVO> of(Page<Color> page) {
+    public static Page<ColorVO> of(Page<ColorDO> page) {
         if (page == null) {
             return new Page<>();
         }
@@ -51,21 +51,21 @@ public class ColorVO implements Serializable {
         return pageOut;
     }
 
-    public static ColorVO of(Color color) {
-        if (color == null) {
+    public static ColorVO of(ColorDO colorDO) {
+        if (colorDO == null) {
             return null;
         }
         ColorVO colorVO = new ColorVO();
-        BeanUtils.copyProperties(color, colorVO);
+        BeanUtils.copyProperties(colorDO, colorVO);
         return colorVO;
     }
 
-    public static Color of(ColorVO colorVO) {
+    public static ColorDO of(ColorVO colorVO) {
         if (colorVO == null) {
             return null;
         }
-        Color color = new Color();
-        BeanUtils.copyProperties(colorVO, color);
-        return color;
+        ColorDO colorDO = new ColorDO();
+        BeanUtils.copyProperties(colorVO, colorDO);
+        return colorDO;
     }
 }

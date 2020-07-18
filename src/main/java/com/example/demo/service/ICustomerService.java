@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dao.ds1.entity.Customer;
+import com.example.demo.dao.ds1.entity.CustomerDO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author pax
  * @since 2020-03-19
  */
-public interface ICustomerService extends IService<Customer> {
+public interface ICustomerService extends IService<CustomerDO> {
 
 }

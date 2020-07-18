@@ -2,7 +2,7 @@ package com.example.demo.model;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.helper.Group4UpdateAction;
-import com.example.demo.dao.ds1.entity.Customer;
+import com.example.demo.dao.ds1.entity.CustomerDO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -47,7 +47,7 @@ public class CustomerVO implements Serializable {
     @ApiModelProperty("描述")
     private String note;
 
-    public static Page<CustomerVO> of(Page<Customer> page) {
+    public static Page<CustomerVO> of(Page<CustomerDO> page) {
         if (page == null) {
             return new Page<>();
         }
@@ -61,21 +61,21 @@ public class CustomerVO implements Serializable {
         return pageOut;
     }
 
-    public static CustomerVO of(Customer customer) {
-        if (customer == null) {
+    public static CustomerVO of(CustomerDO customerDO) {
+        if (customerDO == null) {
             return null;
         }
         CustomerVO customerVO = new CustomerVO();
-        BeanUtils.copyProperties(customer, customerVO);
+        BeanUtils.copyProperties(customerDO, customerVO);
         return customerVO;
     }
 
-    public static Customer of(CustomerVO customerVO) {
+    public static CustomerDO of(CustomerVO customerVO) {
         if (customerVO == null) {
             return null;
         }
-        Customer customer = new Customer();
-        BeanUtils.copyProperties(customerVO, customer);
-        return customer;
+        CustomerDO customerDO = new CustomerDO();
+        BeanUtils.copyProperties(customerVO, customerDO);
+        return customerDO;
     }
 }

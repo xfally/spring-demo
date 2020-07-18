@@ -23,7 +23,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("t_product")
-public class Product implements Serializable {
+public class ProductDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

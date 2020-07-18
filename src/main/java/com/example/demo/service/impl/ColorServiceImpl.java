@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.demo.dao.ds2.entity.Color;
+import com.example.demo.dao.ds2.entity.ColorDO;
 import com.example.demo.dao.ds2.mapper.ColorMapper;
 import com.example.demo.service.IColorService;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-05-08
  */
 @Service
-public class ColorServiceImpl extends ServiceImpl<ColorMapper, Color> implements IColorService {
+public class ColorServiceImpl extends ServiceImpl<ColorMapper, ColorDO> implements IColorService {
     //some custom method...
 }

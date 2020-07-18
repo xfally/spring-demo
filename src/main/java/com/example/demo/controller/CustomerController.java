@@ -7,7 +7,7 @@ import com.example.demo.common.helper.Group4UpdateAction;
 import com.example.demo.common.response.UnifiedCodeEnum;
 import com.example.demo.common.response.UnifiedException;
 import com.example.demo.common.response.UnifiedResponse;
-import com.example.demo.dao.ds1.entity.Customer;
+import com.example.demo.dao.ds1.entity.CustomerDO;
 import com.example.demo.model.CustomerVO;
 import com.example.demo.service.ICustomerService;
 import io.swagger.annotations.Api;
@@ -59,22 +59,22 @@ public class CustomerController {
     @GetMapping("get")
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'customer_' + #id")
     public CustomerVO getCustomer(@ApiParam(value = "客户ID", required = true) @RequestParam @Valid @NotNull Long id) {
-        Customer customer = customerService.getById(id);
-        if (customer == null) {
+        CustomerDO customerDO = customerService.getById(id);
+        if (customerDO == null) {
             throw new UnifiedException(UnifiedCodeEnum.B1001, id);
         }
-        return CustomerVO.of(customer);
+        return CustomerVO.of(customerDO);
     }
 
     @ApiOperation("获取所有客户信息")
     @GetMapping("list")
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'customer_list'")
     public List<CustomerVO> listCustomers() {
-        List<Customer> customers = customerService.list();
-        if (customers == null) {
+        List<CustomerDO> customerDOList = customerService.list();
+        if (customerDOList == null) {
             return new ArrayList<>();
         }
-        return customers
+        return customerDOList
             .stream()
             .map(CustomerVO::of)
             .collect(Collectors.toList());
@@ -86,11 +86,11 @@ public class CustomerController {
     public Page<CustomerVO> pageCustomers(@ApiParam(value = "当前页码") @RequestParam(defaultValue = "1") @Valid @NotNull Long current,
                                           @ApiParam(value = "每页数量") @RequestParam(defaultValue = "10") @Valid @NotNull Long size,
                                           @ApiParam(value = "查询条件：客户名") @RequestParam(required = false) @Valid String name) {
-        LambdaQueryWrapper<Customer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<CustomerDO> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (!StringUtils.isBlank(name)) {
-            lambdaQueryWrapper.like(Customer::getName, name);
+            lambdaQueryWrapper.like(CustomerDO::getName, name);
         }
-        Page<Customer> page = customerService.page(new Page<>(current, size), lambdaQueryWrapper);
+        Page<CustomerDO> page = customerService.page(new Page<>(current, size), lambdaQueryWrapper);
         return CustomerVO.of(page);
     }
 
@@ -99,11 +99,11 @@ public class CustomerController {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'customer_' + #result.id", condition = "#result.id != 'null'")
     public CustomerVO saveCustomer(@ApiParam(value = "客户信息", required = true) @RequestBody @Valid CustomerVO customerVO) {
-        Customer customer = CustomerVO.of(customerVO);
-        customerService.save(customer);
+        CustomerDO customerDO = CustomerVO.of(customerVO);
+        customerService.save(customerDO);
         // TEST: 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;
-        customerVO.setId(customer.getId());
+        customerVO.setId(customerDO.getId());
         return customerVO;
     }
 
@@ -112,8 +112,8 @@ public class CustomerController {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'customer_' + #result.id")
     public CustomerVO updateCustomer(@ApiParam(value = "客户信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) CustomerVO customerVO) {
-        Customer customer = customerService.getById(customerVO.getId());
-        if (customer == null) {
+        CustomerDO customerDO = customerService.getById(customerVO.getId());
+        if (customerDO == null) {
             throw new UnifiedException(UnifiedCodeEnum.B1001, customerVO.getId());
         }
         customerService.updateById(CustomerVO.of(customerVO));
@@ -130,9 +130,9 @@ public class CustomerController {
         }
     )
     public Boolean removeCustomer(@ApiParam(value = "客户ID", required = true) @RequestParam @Valid @NotNull Long id) {
-        Customer customer = customerService.getById(id);
+        CustomerDO customerDO = customerService.getById(id);
         CustomerVO customerVO = new CustomerVO();
-        if (customer == null) {
+        if (customerDO == null) {
             customerVO.setId(id);
             throw new UnifiedException(UnifiedCodeEnum.B1001, id);
         }

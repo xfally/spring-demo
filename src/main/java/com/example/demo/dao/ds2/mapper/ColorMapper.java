@@ -1,7 +1,7 @@
 package com.example.demo.dao.ds2.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.demo.dao.ds2.entity.Color;
+import com.example.demo.dao.ds2.entity.ColorDO;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.example.demo.dao.ds2.entity.Color;
  * @author pax
  * @since 2020-05-08
  */
-public interface ColorMapper extends BaseMapper<Color> {
+public interface ColorMapper extends BaseMapper<ColorDO> {
 
 }

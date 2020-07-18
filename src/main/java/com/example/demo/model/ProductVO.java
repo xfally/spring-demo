@@ -2,7 +2,7 @@ package com.example.demo.model;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.helper.Group4UpdateAction;
-import com.example.demo.dao.ds1.entity.Product;
+import com.example.demo.dao.ds1.entity.ProductDO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -37,7 +37,7 @@ public class ProductVO implements Serializable {
     @ApiModelProperty("描述")
     private String note;
 
-    public static Page<ProductVO> of(Page<Product> page) {
+    public static Page<ProductVO> of(Page<ProductDO> page) {
         if (page == null) {
             return new Page<>();
         }
@@ -51,21 +51,21 @@ public class ProductVO implements Serializable {
         return pageOut;
     }
 
-    public static ProductVO of(Product product) {
-        if (product == null) {
+    public static ProductVO of(ProductDO productDO) {
+        if (productDO == null) {
             return null;
         }
         ProductVO productVO = new ProductVO();
-        BeanUtils.copyProperties(product, productVO);
+        BeanUtils.copyProperties(productDO, productVO);
         return productVO;
     }
 
-    public static Product of(ProductVO productVO) {
+    public static ProductDO of(ProductVO productVO) {
         if (productVO == null) {
             return null;
         }
-        Product product = new Product();
-        BeanUtils.copyProperties(productVO, product);
-        return product;
+        ProductDO productDO = new ProductDO();
+        BeanUtils.copyProperties(productVO, productDO);
+        return productDO;
     }
 }

@@ -22,7 +22,7 @@ import java.io.Serializable;
 @Accessors(chain = true)
 @TableName("t_color")
 @ApiModel(value = "颜色DO", description = "")
-public class Color implements Serializable {
+public class ColorDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

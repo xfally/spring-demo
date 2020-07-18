@@ -7,7 +7,7 @@ import com.example.demo.common.helper.Group4UpdateAction;
 import com.example.demo.common.response.UnifiedCodeEnum;
 import com.example.demo.common.response.UnifiedException;
 import com.example.demo.common.response.UnifiedResponse;
-import com.example.demo.dao.ds2.entity.Color;
+import com.example.demo.dao.ds2.entity.ColorDO;
 import com.example.demo.model.ColorVO;
 import com.example.demo.service.IColorService;
 import io.swagger.annotations.Api;
@@ -49,22 +49,22 @@ public class ColorController {
     @GetMapping("get")
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'color_' + #id")
     public ColorVO getColor(@ApiParam(value = "颜色ID", required = true) @RequestParam @Valid @NotNull Long id) {
-        Color color = colorService.getById(id);
-        if (color == null) {
+        ColorDO colorDO = colorService.getById(id);
+        if (colorDO == null) {
             throw new UnifiedException(UnifiedCodeEnum.B1004, id);
         }
-        return ColorVO.of(color);
+        return ColorVO.of(colorDO);
     }
 
     @ApiOperation("获取所有颜色信息")
     @GetMapping("list")
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'color_list'")
     public List<ColorVO> listColors() {
-        List<Color> colors = colorService.list();
-        if (colors == null) {
+        List<ColorDO> colorDOList = colorService.list();
+        if (colorDOList == null) {
             return new ArrayList<>();
         }
-        return colors
+        return colorDOList
             .stream()
             .map(ColorVO::of)
             .collect(Collectors.toList());
@@ -76,11 +76,11 @@ public class ColorController {
     public Page<ColorVO> pageColors(@ApiParam(value = "当前页码") @RequestParam(defaultValue = "1") @Valid @NotNull Long current,
                                     @ApiParam(value = "每页数量") @RequestParam(defaultValue = "10") @Valid @NotNull Long size,
                                     @ApiParam(value = "查询条件：颜色名") @RequestParam(required = false) @Valid String name) {
-        LambdaQueryWrapper<Color> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<ColorDO> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (!StringUtils.isBlank(name)) {
-            lambdaQueryWrapper.like(Color::getName, name);
+            lambdaQueryWrapper.like(ColorDO::getName, name);
         }
-        Page<Color> page = colorService.page(new Page<>(current, size), lambdaQueryWrapper);
+        Page<ColorDO> page = colorService.page(new Page<>(current, size), lambdaQueryWrapper);
         return ColorVO.of(page);
     }
 
@@ -89,11 +89,11 @@ public class ColorController {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'color_' + #result.id", condition = "#result.id != 'null'")
     public ColorVO saveColor(@ApiParam(value = "颜色信息", required = true) @RequestBody @Valid ColorVO colorVO) {
-        Color color = ColorVO.of(colorVO);
-        colorService.save(color);
+        ColorDO colorDO = ColorVO.of(colorVO);
+        colorService.save(colorDO);
         // 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;
-        colorVO.setId(color.getId());
+        colorVO.setId(colorDO.getId());
         return colorVO;
     }
 
@@ -102,8 +102,8 @@ public class ColorController {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'color_' + #result.id")
     public ColorVO updateColor(@ApiParam(value = "颜色信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) ColorVO colorVO) {
-        Color color = colorService.getById(colorVO.getId());
-        if (color == null) {
+        ColorDO colorDO = colorService.getById(colorVO.getId());
+        if (colorDO == null) {
             throw new UnifiedException(UnifiedCodeEnum.B1004, colorVO.getId());
         }
         colorService.updateById(ColorVO.of(colorVO));
@@ -120,9 +120,9 @@ public class ColorController {
         }
     )
     public Boolean removeColor(@ApiParam(value = "颜色ID", required = true) @RequestParam @Valid @NotNull Long id) {
-        Color color = colorService.getById(id);
+        ColorDO colorDO = colorService.getById(id);
         ColorVO colorVO = new ColorVO();
-        if (color == null) {
+        if (colorDO == null) {
             colorVO.setId(id);
             throw new UnifiedException(UnifiedCodeEnum.B1004, id);
         }

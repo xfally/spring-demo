@@ -107,6 +107,11 @@ public class OrderController {
     @ApiOperation("保存订单信息")
     @PostMapping("save")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @Caching(
+        evict = {
+            @CacheEvict(value = "demoCache", key = "'order_list'", beforeInvocation = false)
+        }
+    )
     @CachePut(value = "demoCache", key = "'order_' + #result.id", condition = "#result.id != 'null'")
     public OrderOutVO saveOrder(@ApiParam(value = "订单信息", required = true) @RequestBody @Validated(Group4AddAction.class) OrderInVO orderInVO) {
         OrderDO orderDO = OrderInVO.of(orderInVO);

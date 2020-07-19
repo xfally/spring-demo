@@ -107,6 +107,11 @@ public class CustomerController {
     @ApiOperation("保存客户信息")
     @PostMapping("save")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @Caching(
+        evict = {
+            @CacheEvict(value = "demoCache", key = "'customer_list'", beforeInvocation = false)
+        }
+    )
     @CachePut(value = "demoCache", key = "'customer_' + #result.id", condition = "#result.id != 'null'")
     public CustomerOutVO saveCustomer(@ApiParam(value = "客户信息", required = true) @RequestBody @Valid CustomerInVO customerInVO) {
         CustomerDO customerDO = CustomerInVO.of(customerInVO);

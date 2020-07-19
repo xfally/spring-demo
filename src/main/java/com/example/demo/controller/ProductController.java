@@ -97,6 +97,11 @@ public class ProductController {
     @ApiOperation("保存产品信息")
     @PostMapping("save")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @Caching(
+        evict = {
+            @CacheEvict(value = "demoCache", key = "'product_list'", beforeInvocation = false)
+        }
+    )
     @CachePut(value = "demoCache", key = "'product_' + #result.id", condition = "#result.id != 'null'")
     public ProductOutVO saveProduct(@ApiParam(value = "产品信息", required = true) @RequestBody @Valid ProductInVO productInVO) {
         ProductDO productDO = ProductInVO.of(productInVO);

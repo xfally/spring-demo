@@ -97,6 +97,11 @@ public class ColorController {
     @ApiOperation("保存颜色信息")
     @PostMapping("save")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @Caching(
+        evict = {
+            @CacheEvict(value = "demoCache", key = "'color_list'", beforeInvocation = false)
+        }
+    )
     @CachePut(value = "demoCache", key = "'color_' + #result.id", condition = "#result.id != 'null'")
     public ColorOutVO saveColor(@ApiParam(value = "颜色信息", required = true) @RequestBody @Valid ColorInVO colorInVO) {
         ColorDO colorDO = ColorInVO.of(colorInVO);

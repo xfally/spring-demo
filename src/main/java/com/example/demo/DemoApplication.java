@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.spring4all.swagger.EnableSwagger2Doc;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -10,7 +9,6 @@ import org.springframework.cache.annotation.EnableCaching;
  *
  * @author pax
  */
-@EnableSwagger2Doc
 @SpringBootApplication
 @EnableCaching
 public class DemoApplication {

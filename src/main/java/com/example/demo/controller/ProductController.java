@@ -4,7 +4,9 @@ package com.example.demo.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.helper.Group4UpdateAction;
-import com.example.demo.common.response.UnifiedCodeEnum;
+import com.example.demo.common.model.UnifiedCodeEnum;
+import com.example.demo.common.model.UnifiedPage;
+import com.example.demo.common.model.UnifiedQuery;
 import com.example.demo.common.response.UnifiedException;
 import com.example.demo.common.response.UnifiedResponse;
 import com.example.demo.dao.ds1.entity.ProductDO;
@@ -15,7 +17,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -72,25 +73,25 @@ public class ProductController {
             .collect(Collectors.toList());
     }
 
-    @ApiOperation("分页获取所有产品信息")
-    @GetMapping("page")
+    @ApiOperation("分页查询产品信息")
+    @PostMapping("query")
     // 因为有搜索条件，命中率低，不采用缓存
-    public Page<ProductOutVO> pageProducts(@ApiParam(value = "当前页码") @RequestParam(defaultValue = "1") @Valid @NotNull Long current,
-                                           @ApiParam(value = "每页数量") @RequestParam(defaultValue = "10") @Valid @NotNull Long size,
-                                           @ApiParam(value = "查询条件：产品名") @RequestParam(required = false) @Valid String name) {
+    public UnifiedPage<ProductOutVO> queryProducts(@ApiParam(value = "统一查询条件") @RequestBody @Valid @NotNull UnifiedQuery unifiedQuery,
+                                                   @ApiParam(value = "查询条件：产品名") @RequestParam(required = false) @Valid String name) {
         LambdaQueryWrapper<ProductDO> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (!StringUtils.isBlank(name)) {
-            lambdaQueryWrapper.like(ProductDO::getName, name);
+            if (unifiedQuery.getEqual()) {
+                lambdaQueryWrapper.eq(ProductDO::getName, name);
+            } else {
+                lambdaQueryWrapper.like(ProductDO::getName, name);
+            }
         }
-        Page<ProductDO> page = productService.page(new Page<>(current, size), lambdaQueryWrapper);
+        Page<ProductDO> page = productService.page(new Page<>(unifiedQuery.getCurrent(), unifiedQuery.getSize()), lambdaQueryWrapper);
         List<ProductOutVO> productOutVOList = page.getRecords()
             .stream()
             .map(ProductOutVO::of)
             .collect(Collectors.toList());
-        Page<ProductOutVO> page1 = new Page<>();
-        BeanUtils.copyProperties(page, page1);
-        page1.setRecords(productOutVOList);
-        return page1;
+        return UnifiedPage.of(page, productOutVOList);
     }
 
     @ApiOperation("保存产品信息")

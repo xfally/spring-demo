@@ -1,4 +1,4 @@
-package com.example.demo.common.response;
+package com.example.demo.common.model;
 
 import lombok.Getter;
 import lombok.ToString;

@@ -1,5 +1,7 @@
 package com.example.demo.common.response;
 
+import com.example.demo.common.model.UnifiedCodeEnum;
+import com.example.demo.common.model.UnifiedResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

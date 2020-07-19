@@ -9,7 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -38,7 +37,6 @@ public class CustomerInVO implements Serializable {
     //@Min(value = 0, message = "年龄需大于等于0")
     //@Max(value = 200, message = "年龄需小于等于200")
     @Range(min = 0, max = 200, message = "年龄需在0~200岁之间")
-    @Value("#{0}")
     private Integer age;
 
     @ApiModelProperty("描述")

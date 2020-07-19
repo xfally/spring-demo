@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -40,7 +39,6 @@ public class OrderInVO implements Serializable {
     @ApiModelProperty("购买数量")
     @NotNull(message = "购买数量不能为NULL")
     @Min(value = 1, message = "购买数量需大于或等于1")
-    @Value("#{1}")
     private Integer quantity;
 
     @ApiModelProperty("描述")

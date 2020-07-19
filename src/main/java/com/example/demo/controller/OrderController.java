@@ -4,7 +4,9 @@ package com.example.demo.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.helper.Group4AddAction;
 import com.example.demo.common.helper.Group4UpdateAction;
-import com.example.demo.common.response.UnifiedCodeEnum;
+import com.example.demo.common.model.UnifiedCodeEnum;
+import com.example.demo.common.model.UnifiedPage;
+import com.example.demo.common.model.UnifiedQuery;
 import com.example.demo.common.response.UnifiedException;
 import com.example.demo.common.response.UnifiedResponse;
 import com.example.demo.dao.ds1.entity.CustomerDO;
@@ -18,7 +20,6 @@ import com.example.demo.service.IProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -87,12 +88,11 @@ public class OrderController {
             .collect(Collectors.toList());
     }
 
-    @ApiOperation("分页获取所有订单信息")
-    @GetMapping("page")
+    @ApiOperation("分页查询订单信息")
+    @PostMapping("query")
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'order_page'")
-    public Page<OrderOutVO> pageOrders(@ApiParam(value = "当前页码") @RequestParam(defaultValue = "1") @Valid @NotNull Long current,
-                                       @ApiParam(value = "每页数量") @RequestParam(defaultValue = "10") @Valid @NotNull Long size) {
-        Page<OrderDO> page = orderService.page(new Page<>(current, size));
+    public UnifiedPage<OrderOutVO> queryOrders(@ApiParam(value = "统一查询条件") @RequestBody @Valid @NotNull UnifiedQuery unifiedQuery) {
+        Page<OrderDO> page = orderService.page(new Page<>(unifiedQuery.getCurrent(), unifiedQuery.getSize()));
         List<OrderOutVO> orderOutVOList = page.getRecords()
             .stream()
             .map(orderDO -> {
@@ -101,10 +101,7 @@ public class OrderController {
                 return OrderOutVO.of(orderDO, customerDO, productDO);
             })
             .collect(Collectors.toList());
-        Page<OrderOutVO> page1 = new Page<>();
-        BeanUtils.copyProperties(page, page1);
-        page1.setRecords(orderOutVOList);
-        return page1;
+        return UnifiedPage.of(page, orderOutVOList);
     }
 
     @ApiOperation("保存订单信息")

@@ -113,7 +113,7 @@ public class MybatisPlusGenerator {
     }
 
     public static void main(String[] args) {
-        String DS_URL = "jdbc:mysql://172.17.0.1:3306/com_example_demo?useUnicode=true&useSSL=false&character_set_server=utf8mb4";
+        String DS_URL = "jdbc:mysql://192.168.0.150:3306/com_example_demo?useUnicode=true&useSSL=false&character_set_server=utf8mb4";
         String DS_DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
         String DS_USER_NAME = "root";
         String DS_PASSWORD = "123456";
@@ -123,7 +123,7 @@ public class MybatisPlusGenerator {
 
         generate(DS_URL, DS_DRIVER_NAME, DS_USER_NAME, DS_PASSWORD, PKG_PARENT, TABLE_LIST, MAPPER_PART);
 
-        String DS_URL_2 = "jdbc:postgresql://172.17.0.1:5432/com_example_demo";
+        String DS_URL_2 = "jdbc:postgresql://192.168.0.150:5432/com_example_demo";
         String DS_DRIVER_NAME_2 = "org.postgresql.Driver";
         String DS_USER_NAME_2 = "postgres";
         String DS_PASSWORD_2 = "123456";

@@ -8,12 +8,14 @@ import com.example.demo.common.response.UnifiedCodeEnum;
 import com.example.demo.common.response.UnifiedException;
 import com.example.demo.common.response.UnifiedResponse;
 import com.example.demo.dao.ds1.entity.ProductDO;
-import com.example.demo.model.ProductVO;
+import com.example.demo.model.ProductInVO;
+import com.example.demo.model.ProductOutVO;
 import com.example.demo.service.IProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -48,66 +50,73 @@ public class ProductController {
     @ApiOperation("获取产品信息")
     @GetMapping("get")
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'product_' + #id")
-    public ProductVO getProduct(@ApiParam(value = "产品ID", required = true) @RequestParam @Valid @NotNull Long id) {
+    public ProductOutVO getProduct(@ApiParam(value = "产品ID", required = true) @RequestParam @Valid @NotNull Long id) {
         ProductDO productDO = productService.getById(id);
         if (productDO == null) {
             throw new UnifiedException(UnifiedCodeEnum.B1002, id);
         }
-        return ProductVO.of(productDO);
+        return ProductOutVO.of(productDO);
     }
 
     @ApiOperation("获取所有产品信息")
     @GetMapping("list")
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'product_list'")
-    public List<ProductVO> listProducts() {
+    public List<ProductOutVO> listProducts() {
         List<ProductDO> productDOList = productService.list();
         if (productDOList == null) {
             return new ArrayList<>();
         }
         return productDOList
             .stream()
-            .map(ProductVO::of)
+            .map(ProductOutVO::of)
             .collect(Collectors.toList());
     }
 
     @ApiOperation("分页获取所有产品信息")
     @GetMapping("page")
     // 因为有搜索条件，命中率低，不采用缓存
-    public Page<ProductVO> pageProducts(@ApiParam(value = "当前页码") @RequestParam(defaultValue = "1") @Valid @NotNull Long current,
-                                        @ApiParam(value = "每页数量") @RequestParam(defaultValue = "10") @Valid @NotNull Long size,
-                                        @ApiParam(value = "查询条件：产品名") @RequestParam(required = false) @Valid String name) {
+    public Page<ProductOutVO> pageProducts(@ApiParam(value = "当前页码") @RequestParam(defaultValue = "1") @Valid @NotNull Long current,
+                                           @ApiParam(value = "每页数量") @RequestParam(defaultValue = "10") @Valid @NotNull Long size,
+                                           @ApiParam(value = "查询条件：产品名") @RequestParam(required = false) @Valid String name) {
         LambdaQueryWrapper<ProductDO> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (!StringUtils.isBlank(name)) {
             lambdaQueryWrapper.like(ProductDO::getName, name);
         }
         Page<ProductDO> page = productService.page(new Page<>(current, size), lambdaQueryWrapper);
-        return ProductVO.of(page);
+        List<ProductOutVO> productOutVOList = page.getRecords()
+            .stream()
+            .map(ProductOutVO::of)
+            .collect(Collectors.toList());
+        Page<ProductOutVO> page1 = new Page<>();
+        BeanUtils.copyProperties(page, page1);
+        page1.setRecords(productOutVOList);
+        return page1;
     }
 
     @ApiOperation("保存产品信息")
     @PostMapping("save")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'product_' + #result.id", condition = "#result.id != 'null'")
-    public ProductVO saveProduct(@ApiParam(value = "产品信息", required = true) @RequestBody @Valid ProductVO productVO) {
-        ProductDO productDO = ProductVO.of(productVO);
+    public ProductOutVO saveProduct(@ApiParam(value = "产品信息", required = true) @RequestBody @Valid ProductInVO productInVO) {
+        ProductDO productDO = ProductInVO.of(productInVO);
         productService.save(productDO);
         // TEST: 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;
-        productVO.setId(productDO.getId());
-        return productVO;
+        return ProductOutVO.of(productDO);
     }
 
     @ApiOperation("更新产品信息")
     @PutMapping("update")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'product_' + #result.id")
-    public ProductVO updateProduct(@ApiParam(value = "产品信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) ProductVO productVO) {
-        ProductDO productDO = productService.getById(productVO.getId());
+    public ProductOutVO updateProduct(@ApiParam(value = "产品信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) ProductInVO productInVO) {
+        ProductDO productDO = productService.getById(productInVO.getId());
         if (productDO == null) {
-            throw new UnifiedException(UnifiedCodeEnum.B1002, productVO.getId());
+            throw new UnifiedException(UnifiedCodeEnum.B1002, productInVO.getId());
         }
-        productService.updateById(ProductVO.of(productVO));
-        return productVO;
+        productDO = ProductInVO.of(productInVO);
+        productService.updateById(productDO);
+        return ProductOutVO.of(productDO);
     }
 
     @ApiOperation("删除产品信息")
@@ -121,9 +130,9 @@ public class ProductController {
     )
     public Boolean removeProduct(@ApiParam(value = "产品ID", required = true) @RequestParam @Valid @NotNull Long id) {
         ProductDO productDO = productService.getById(id);
-        ProductVO productVO = new ProductVO();
+        ProductOutVO productOutVO = new ProductOutVO();
         if (productDO == null) {
-            productVO.setId(id);
+            productOutVO.setId(id);
             throw new UnifiedException(UnifiedCodeEnum.B1002, id);
         }
         return productService.removeById(id);

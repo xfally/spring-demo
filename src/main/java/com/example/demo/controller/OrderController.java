@@ -7,12 +7,18 @@ import com.example.demo.common.helper.Group4UpdateAction;
 import com.example.demo.common.response.UnifiedCodeEnum;
 import com.example.demo.common.response.UnifiedException;
 import com.example.demo.common.response.UnifiedResponse;
+import com.example.demo.dao.ds1.entity.CustomerDO;
 import com.example.demo.dao.ds1.entity.OrderDO;
-import com.example.demo.model.OrderVO;
+import com.example.demo.dao.ds1.entity.ProductDO;
+import com.example.demo.model.OrderInVO;
+import com.example.demo.model.OrderOutVO;
+import com.example.demo.service.ICustomerService;
 import com.example.demo.service.IOrderService;
+import com.example.demo.service.IProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -44,70 +50,97 @@ public class OrderController {
     @Autowired
     private IOrderService orderService;
 
+    @Autowired
+    private ICustomerService customerService;
+
+    @Autowired
+    private IProductService productService;
+
     @ApiOperation("获取订单信息")
     @GetMapping("get")
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'order_' + #id")
-    public OrderVO getOrder(@ApiParam(value = "订单ID", required = true) @RequestParam @Valid @NotNull Long id) {
+    public OrderOutVO getOrder(@ApiParam(value = "订单ID", required = true) @RequestParam @Valid @NotNull Long id) {
         OrderDO orderDO = orderService.getById(id);
         if (orderDO == null) {
             throw new UnifiedException(UnifiedCodeEnum.B1003, id);
         }
-        return OrderVO.of(orderDO);
+        CustomerDO customerDO = customerService.getById(orderDO.getCustomerId());
+        ProductDO productDO = productService.getById(orderDO.getProductId());
+        return OrderOutVO.of(orderDO, customerDO, productDO);
     }
 
     @ApiOperation("获取所有订单信息")
     @GetMapping("list")
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'order_list'")
-    public List<OrderVO> listOrders() {
+    public List<OrderOutVO> listOrders() {
         List<OrderDO> orderDOList = orderService.list();
         if (orderDOList == null) {
             return new ArrayList<>();
         }
         return orderDOList
             .stream()
-            .map(OrderVO::of)
+            .map(orderDO -> {
+                CustomerDO customerDO = customerService.getById(orderDO.getCustomerId());
+                ProductDO productDO = productService.getById(orderDO.getProductId());
+                return OrderOutVO.of(orderDO, customerDO, productDO);
+            })
             .collect(Collectors.toList());
     }
 
     @ApiOperation("分页获取所有订单信息")
     @GetMapping("page")
     @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'order_page'")
-    public Page<OrderVO> pageOrders(@ApiParam(value = "当前页码") @RequestParam(defaultValue = "1") @Valid @NotNull Long current,
-                                    @ApiParam(value = "每页数量") @RequestParam(defaultValue = "10") @Valid @NotNull Long size) {
+    public Page<OrderOutVO> pageOrders(@ApiParam(value = "当前页码") @RequestParam(defaultValue = "1") @Valid @NotNull Long current,
+                                       @ApiParam(value = "每页数量") @RequestParam(defaultValue = "10") @Valid @NotNull Long size) {
         Page<OrderDO> page = orderService.page(new Page<>(current, size));
-        return OrderVO.of(page);
+        List<OrderOutVO> orderOutVOList = page.getRecords()
+            .stream()
+            .map(orderDO -> {
+                CustomerDO customerDO = customerService.getById(orderDO.getCustomerId());
+                ProductDO productDO = productService.getById(orderDO.getProductId());
+                return OrderOutVO.of(orderDO, customerDO, productDO);
+            })
+            .collect(Collectors.toList());
+        Page<OrderOutVO> page1 = new Page<>();
+        BeanUtils.copyProperties(page, page1);
+        page1.setRecords(orderOutVOList);
+        return page1;
     }
 
     @ApiOperation("保存订单信息")
     @PostMapping("save")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'order_' + #result.id", condition = "#result.id != 'null'")
-    public OrderVO saveOrder(@ApiParam(value = "订单信息", required = true) @RequestBody @Validated(Group4AddAction.class) OrderVO orderVO) {
-        OrderDO orderDO = OrderVO.of(orderVO);
+    public OrderOutVO saveOrder(@ApiParam(value = "订单信息", required = true) @RequestBody @Validated(Group4AddAction.class) OrderInVO orderInVO) {
+        OrderDO orderDO = OrderInVO.of(orderInVO);
         orderService.save(orderDO);
         // TEST: 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;
-        orderVO.setId(orderDO.getId());
-        return orderVO;
+        CustomerDO customerDO = customerService.getById(orderDO.getCustomerId());
+        ProductDO productDO = productService.getById(orderDO.getProductId());
+        return OrderOutVO.of(orderDO, customerDO, productDO);
     }
 
     @ApiOperation("更新订单信息")
     @PutMapping("update")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @CachePut(value = "demoCache", key = "'order_' + #result.id")
-    public OrderVO updateOrder(@ApiParam(value = "订单信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) OrderVO orderVO) {
-        OrderDO orderDO = orderService.getById(orderVO.getId());
+    public OrderOutVO updateOrder(@ApiParam(value = "订单信息", required = true) @RequestBody @Validated(Group4UpdateAction.class) OrderInVO orderInVO) {
+        OrderDO orderDO = orderService.getById(orderInVO.getId());
         if (orderDO == null) {
-            throw new UnifiedException(UnifiedCodeEnum.B1003, orderVO.getId());
+            throw new UnifiedException(UnifiedCodeEnum.B1003, orderInVO.getId());
         }
-        if (orderVO.getCustomerId() == null) {
-            orderVO.setCustomerId(orderDO.getCustomerId());
+        if (orderInVO.getCustomerId() == null) {
+            orderInVO.setCustomerId(orderDO.getCustomerId());
         }
-        if (orderVO.getProductId() == null) {
-            orderVO.setProductId(orderDO.getProductId());
+        if (orderInVO.getProductId() == null) {
+            orderInVO.setProductId(orderDO.getProductId());
         }
-        orderService.updateById(OrderVO.of(orderVO));
-        return orderVO;
+        orderDO = OrderInVO.of(orderInVO);
+        orderService.updateById(orderDO);
+        CustomerDO customerDO = customerService.getById(orderDO.getCustomerId());
+        ProductDO productDO = productService.getById(orderDO.getProductId());
+        return OrderOutVO.of(orderDO, customerDO, productDO);
     }
 
     @ApiOperation("删除订单信息")
@@ -121,9 +154,9 @@ public class OrderController {
     )
     public Boolean removeOrder(@ApiParam(value = "订单ID", required = true) @RequestParam @Valid @NotNull Long id) {
         OrderDO orderDO = orderService.getById(id);
-        OrderVO orderVO = new OrderVO();
+        OrderOutVO orderOutVO = new OrderOutVO();
         if (orderDO == null) {
-            orderVO.setId(id);
+            orderOutVO.setId(id);
             throw new UnifiedException(UnifiedCodeEnum.B1003, id);
         }
         return orderService.removeById(id);

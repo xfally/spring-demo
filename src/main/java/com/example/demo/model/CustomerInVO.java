@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.helper.Group4UpdateAction;
 import com.example.demo.dao.ds1.entity.CustomerDO;
 import io.swagger.annotations.ApiModel;
@@ -15,19 +14,17 @@ import org.springframework.beans.factory.annotation.Value;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * 客户VO
+ * 客户InVO
  *
  * @author pax
  */
-@ApiModel("客户VO")
+@ApiModel("客户InVO")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class CustomerVO implements Serializable {
+public class CustomerInVO implements Serializable {
     @ApiModelProperty("客户ID")
     @NotNull(message = "执行更新操作时，ID不可为NULL", groups = Group4UpdateAction.class)
     private Long id;
@@ -47,35 +44,12 @@ public class CustomerVO implements Serializable {
     @ApiModelProperty("描述")
     private String note;
 
-    public static Page<CustomerVO> of(Page<CustomerDO> page) {
-        if (page == null) {
-            return new Page<>();
-        }
-        List<CustomerVO> customerVOList = page.getRecords()
-            .stream()
-            .map(CustomerVO::of)
-            .collect(Collectors.toList());
-        Page<CustomerVO> pageOut = new Page<>();
-        BeanUtils.copyProperties(page, pageOut);
-        pageOut.setRecords(customerVOList);
-        return pageOut;
-    }
-
-    public static CustomerVO of(CustomerDO customerDO) {
-        if (customerDO == null) {
-            return null;
-        }
-        CustomerVO customerVO = new CustomerVO();
-        BeanUtils.copyProperties(customerDO, customerVO);
-        return customerVO;
-    }
-
-    public static CustomerDO of(CustomerVO customerVO) {
-        if (customerVO == null) {
+    public static CustomerDO of(CustomerInVO customerInVO) {
+        if (customerInVO == null) {
             return null;
         }
         CustomerDO customerDO = new CustomerDO();
-        BeanUtils.copyProperties(customerVO, customerDO);
+        BeanUtils.copyProperties(customerInVO, customerDO);
         return customerDO;
     }
 }

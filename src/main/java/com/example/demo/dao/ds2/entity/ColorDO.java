@@ -1,5 +1,6 @@
 package com.example.demo.dao.ds2.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -27,7 +28,7 @@ public class ColorDO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "颜色ID")
-    @TableId("id")
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     @ApiModelProperty(value = "颜色名")

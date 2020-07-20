@@ -79,6 +79,7 @@ public class ColorServiceImpl extends ServiceImpl<ColorMapper, ColorDO> implemen
     )
     @CachePut(value = "demoCache", key = "'color_' + #result.id", condition = "#result.id != 'null'")
     public ColorDO saveColor(ColorDO colorDO) {
+        colorDO.setId(null);
         save(colorDO);
         // 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;

@@ -87,6 +87,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductDO> im
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @Caching(
+        evict = {
+            @CacheEvict(value = "demoCache", key = "'product_list'", beforeInvocation = false)
+        }
+    )
     @CachePut(value = "demoCache", key = "'product_' + #result.id")
     public ProductDO updateProduct(ProductDO productDO) {
         if (getById(productDO.getId()) == null) {

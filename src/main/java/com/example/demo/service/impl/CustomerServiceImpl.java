@@ -87,6 +87,11 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, CustomerDO>
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @Caching(
+        evict = {
+            @CacheEvict(value = "demoCache", key = "'customer_list'", beforeInvocation = false)
+        }
+    )
     @CachePut(value = "demoCache", key = "'customer_' + #result.id")
     public CustomerDO updateCustomer(CustomerDO customerDO) {
         if (getById(customerDO.getId()) == null) {

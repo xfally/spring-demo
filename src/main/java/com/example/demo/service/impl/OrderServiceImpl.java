@@ -76,6 +76,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderDO> implemen
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @Caching(
+        evict = {
+            @CacheEvict(value = "demoCache", key = "'order_list'", beforeInvocation = false)
+        }
+    )
     @CachePut(value = "demoCache", key = "'order_' + #result.id")
     public OrderDO updateOrder(OrderDO orderDO) {
         OrderDO orderDO1 = getById(orderDO.getId());

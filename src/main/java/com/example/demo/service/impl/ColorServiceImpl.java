@@ -87,6 +87,11 @@ public class ColorServiceImpl extends ServiceImpl<ColorMapper, ColorDO> implemen
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @Caching(
+        evict = {
+            @CacheEvict(value = "demoCache", key = "'color_list'", beforeInvocation = false)
+        }
+    )
     @CachePut(value = "demoCache", key = "'color_' + #result.id")
     public ColorDO updateColor(ColorDO colorDO) {
         if (getById(colorDO.getId()) == null) {

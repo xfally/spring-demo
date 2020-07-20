@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * RabbitMQ消息队列配置
  *
  * @author pax
+ * @since 2020-03-19
  */
 @Configuration
 public class RabbitMQConfig {

@@ -17,6 +17,7 @@ import java.io.Serializable;
  * 颜色InVO
  *
  * @author pax
+ * @since 2020-03-19
  */
 @ApiModel("颜色InVO")
 @Data

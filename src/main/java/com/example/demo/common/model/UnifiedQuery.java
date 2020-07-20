@@ -13,6 +13,7 @@ import java.io.Serializable;
  * 统一查询条件
  *
  * @author pax
+ * @since 2020-03-19
  */
 @ApiModel("统一查询条件")
 @Data

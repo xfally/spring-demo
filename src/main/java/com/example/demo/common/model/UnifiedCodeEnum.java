@@ -7,6 +7,7 @@ import lombok.ToString;
  * 统一错误码
  *
  * @author pax
+ * @since 2020-03-19
  */
 @ToString
 public enum UnifiedCodeEnum {

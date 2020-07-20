@@ -14,6 +14,7 @@ import java.io.Serializable;
  * 产品OutVO
  *
  * @author pax
+ * @since 2020-03-19
  */
 @ApiModel("产品OutVO")
 @Data

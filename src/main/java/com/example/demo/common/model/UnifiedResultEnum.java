@@ -7,6 +7,7 @@ import lombok.ToString;
  * 统一结果值
  *
  * @author pax
+ * @since 2020-03-19
  */
 @ToString
 public enum UnifiedResultEnum {

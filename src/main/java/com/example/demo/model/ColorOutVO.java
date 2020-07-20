@@ -14,6 +14,7 @@ import java.io.Serializable;
  * 颜色OutVO
  *
  * @author pax
+ * @since 2020-03-19
  */
 @ApiModel("颜色OutVO")
 @Data

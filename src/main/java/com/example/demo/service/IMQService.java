@@ -4,6 +4,7 @@ package com.example.demo.service;
  * 消息队列服务
  *
  * @author pax
+ * @since 2020-03-19
  */
 public interface IMQService {
     /**

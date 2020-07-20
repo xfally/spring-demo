@@ -16,6 +16,7 @@ import java.util.List;
  * 认证拦截器配置
  *
  * @author pax
+ * @since 2020-03-19
  */
 @Configuration
 @ConditionalOnProperty(name = "auth.enable", havingValue = "true")

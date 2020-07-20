@@ -8,6 +8,7 @@ import lombok.Getter;
  * 统一异常
  *
  * @author pax
+ * @since 2020-03-19
  */
 public class UnifiedException extends RuntimeException {
     @Getter

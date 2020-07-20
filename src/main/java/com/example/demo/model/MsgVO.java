@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
  * 消息VO
  *
  * @author pax
+ * @since 2020-03-19
  */
 @ApiModel("消息VO")
 @Data

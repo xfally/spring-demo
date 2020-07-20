@@ -34,6 +34,7 @@ import java.io.PrintWriter;
  * 那通常的做法是在网关处做统一认证，类似于上文拦截器Interceptor，得到UserModel，并缓存到redis...
  *
  * @author pax
+ * @since 2020-03-19
  */
 @Slf4j
 public class AuthInterceptor implements HandlerInterceptor {

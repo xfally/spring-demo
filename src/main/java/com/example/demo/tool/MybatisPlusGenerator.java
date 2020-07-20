@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
  * MybatisPlus提供的Dao及Service自动生成器
  *
  * @author pax
+ * @since 2020-03-19
  */
 public class MybatisPlusGenerator {
     private static final String AUTHOR = "pax";

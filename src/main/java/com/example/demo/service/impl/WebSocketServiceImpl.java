@@ -14,6 +14,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * WebSocket服务实现
  *
  * @author pax
+ * @since 2020-03-19
  */
 @Service
 @ServerEndpoint("/ws")

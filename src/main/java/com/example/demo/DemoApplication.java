@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
  * App entry
  *
  * @author pax
+ * @since 2020-03-19
  */
 @SpringBootApplication
 @EnableCaching

@@ -18,6 +18,7 @@ import java.io.Serializable;
  * 订单InVO
  *
  * @author pax
+ * @since 2020-03-19
  */
 @ApiModel("订单InVO")
 @Data

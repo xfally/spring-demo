@@ -67,7 +67,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductDO> im
             }
         }
         Page<ProductDO> page = page(new Page<>(unifiedQuery.getCurrent(), unifiedQuery.getSize()), lambdaQueryWrapper);
-        return UnifiedPage.of(page);
+        return UnifiedPage.ofMbp(page);
     }
 
     @Override

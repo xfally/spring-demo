@@ -1,6 +1,5 @@
 package com.example.demo.common.model;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -43,7 +42,7 @@ public class UnifiedPage<T> implements Serializable {
         return unifiedPage;
     }
 
-    public static <T> UnifiedPage<T> of(Page<T> page) {
+    public static <T> UnifiedPage<T> ofMbp(com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> page) {
         UnifiedPage<T> unifiedPage = new UnifiedPage<>();
         unifiedPage.setCurrent(page.getCurrent());
         unifiedPage.setSize(page.getSize());
@@ -51,4 +50,14 @@ public class UnifiedPage<T> implements Serializable {
         unifiedPage.setRecords(page.getRecords());
         return unifiedPage;
     }
+
+    public static <T> UnifiedPage<T> ofJpa(org.springframework.data.domain.Page<T> page) {
+        UnifiedPage<T> unifiedPage = new UnifiedPage<>();
+        unifiedPage.setCurrent((long) page.getNumber());
+        unifiedPage.setSize((long) page.getSize());
+        unifiedPage.setTotal(page.getTotalElements());
+        unifiedPage.setRecords(page.getContent());
+        return unifiedPage;
+    }
+
 }

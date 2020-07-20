@@ -67,7 +67,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, CustomerDO>
             }
         }
         Page<CustomerDO> page = page(new Page<>(unifiedQuery.getCurrent(), unifiedQuery.getSize()), lambdaQueryWrapper);
-        return UnifiedPage.of(page);
+        return UnifiedPage.ofMbp(page);
     }
 
     @Override

@@ -67,7 +67,7 @@ public class ColorServiceImpl extends ServiceImpl<ColorMapper, ColorDO> implemen
             }
         }
         Page<ColorDO> page = page(new Page<>(unifiedQuery.getCurrent(), unifiedQuery.getSize()), lambdaQueryWrapper);
-        return UnifiedPage.of(page);
+        return UnifiedPage.ofMbp(page);
     }
 
     @Override

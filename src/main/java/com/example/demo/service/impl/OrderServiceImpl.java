@@ -56,7 +56,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderDO> implemen
     // 因为有搜索条件，命中率低，不采用缓存
     public UnifiedPage<OrderDO> queryOrders(UnifiedQuery unifiedQuery) {
         Page<OrderDO> page = page(new Page<>(unifiedQuery.getCurrent(), unifiedQuery.getSize()));
-        return UnifiedPage.of(page);
+        return UnifiedPage.ofMbp(page);
     }
 
     @Override

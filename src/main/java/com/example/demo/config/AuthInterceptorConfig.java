@@ -1,9 +1,16 @@
 package com.example.demo.config;
 
 import com.example.demo.interceptor.AuthInterceptor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 认证拦截器配置
@@ -11,10 +18,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author pax
  */
 @Configuration
+@ConditionalOnProperty(name = "auth.enable", havingValue = "true")
+@Slf4j
 public class AuthInterceptorConfig implements WebMvcConfigurer {
+    @Value("${auth.list}")
+    private String authListStr;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // TODO: 这里`addPathPatterns`可以传入数组，我们可以在yml/properties中定义需要过滤的path。
-        registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/customer/*", "/product/*", "/order/*", "/color/*");
+        log.debug("authListStr={}", authListStr);
+        if (StringUtils.isBlank(authListStr)) {
+            log.warn("auth.list is blank!");
+        }
+        List<String> authList = Arrays.asList(authListStr.trim().split(","));
+        log.debug("authList={}", authList);
+        registry.addInterceptor(new AuthInterceptor()).addPathPatterns(authList);
     }
 }

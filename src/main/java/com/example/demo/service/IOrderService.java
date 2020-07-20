@@ -1,16 +1,29 @@
 package com.example.demo.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.demo.common.model.UnifiedPage;
+import com.example.demo.common.model.UnifiedQuery;
 import com.example.demo.dao.ds1.entity.OrderDO;
 
+import java.util.List;
+
 /**
- * <p>
- * 服务类
- * </p>
+ * 订单信息服务类
  *
  * @author pax
  * @since 2020-03-19
  */
 public interface IOrderService extends IService<OrderDO> {
+    OrderDO getOrder(Long id);
 
+    List<OrderDO> listOrders();
+
+
+    UnifiedPage<OrderDO> queryOrders(UnifiedQuery unifiedQuery);
+
+    OrderDO saveOrder(OrderDO orderDO);
+
+    OrderDO updateOrder(OrderDO orderDO);
+
+    Boolean removeOrder(Long id);
 }

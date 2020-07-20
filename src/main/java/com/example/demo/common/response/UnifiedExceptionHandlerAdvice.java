@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * 统一异常处理
  *
- * @author pax * @since 2020-03-19
+ * @author pax
+ * @since 2020-03-19
+ */
 @ControllerAdvice(annotations = UnifiedResponse.class)
 @ResponseBody
 @Slf4j

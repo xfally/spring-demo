@@ -34,12 +34,21 @@ public class UnifiedPage<T> implements Serializable {
     @ApiModelProperty(value = "结果集合")
     private List<T> records;
 
-    public static <T1, T2> UnifiedPage<T2> of(Page<T1> page, List<T2> records) {
+    public static <T1, T2> UnifiedPage<T2> of(UnifiedPage<T1> page, List<T2> records) {
         UnifiedPage<T2> unifiedPage = new UnifiedPage<>();
         unifiedPage.setCurrent(page.getCurrent());
         unifiedPage.setSize(page.getSize());
         unifiedPage.setTotal(page.getTotal());
         unifiedPage.setRecords(records);
+        return unifiedPage;
+    }
+
+    public static <T> UnifiedPage<T> of(Page<T> page) {
+        UnifiedPage<T> unifiedPage = new UnifiedPage<>();
+        unifiedPage.setCurrent(page.getCurrent());
+        unifiedPage.setSize(page.getSize());
+        unifiedPage.setTotal(page.getTotal());
+        unifiedPage.setRecords(page.getRecords());
         return unifiedPage;
     }
 }

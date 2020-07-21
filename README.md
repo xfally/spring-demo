@@ -43,9 +43,8 @@
 │   │   │               ├── config                        // 配置（@Configuration）
 │   │   │               ├── controller                    // Controller
 │   │   │               ├── DemoApplication.java          // Main主入口
-│   │   │               ├── entity                        // Entity/DO
+│   │   │               ├── dao                           // DAO层，含entity和mapper
 │   │   │               ├── interceptor                   // 拦截器（HandlerInterceptor）
-│   │   │               ├── mapper                        // Mapper/DAO
 │   │   │               ├── model                         // Model/VO
 │   │   │               ├── service                       // Service
 │   │   │               └── tool                          // 工具
@@ -73,9 +72,9 @@
 
 0. 将各处demo关键字或文件名，修改为具体项目的英文名；
 1. 根据需要裁剪或调整pom.xml、application.properties、Dockerfile、docker-compose.yml等配置文件；
-2. 本项目采用Mybatis-Plus映射ORM，可运行`tool/MybatisPlusGenerator.java`自动生产DAO层以及相关业务代码（controller、service、mapper、entity...）；
+2. 本项目默认采用Mybatis-Plus映射ORM（想使用JPA，请切换到dev-jpa分支），可运行`tool/MybatisPlusGenerator.java`自动生产DAO层以及相关业务代码（controller、service、mapper、entity...）；
 3. 当项目规模增大后，可以考虑按功能模块拆分，每个模块都包含controller、service、DAO等；（注意此时需要将“第3点”产生的文件，手动移动到对应模块的包路径下）
 4. 当项目规模非常大时，则应考虑拆分为多个微服务；（注意此时需考虑数据库分库或共享问题）
-5. 本项目给了多数据源如何配置连接的示例，如db1、db2，通常业务不会涉及这种场景，可删除db2与相关aspect拦截配置；
+5. 本项目给了多数据源如何配置连接的示例，如ds1、ds2，通常业务不会涉及这种场景，可删除ds2与相关aspect拦截配置；
 6. 本项目默认启用了redis查询结果缓存（application.properties中可设置被动的自动过期清理时间）并主动使用`@CacheEvict`小心地剔除脏数据;
 7. 考虑到尽量简单处理最少的实体类，本项目建议controller层使用VO，service和dao使用DO。

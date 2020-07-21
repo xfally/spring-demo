@@ -1,7 +1,7 @@
 package com.example.demo.aspect;
 
-import com.example.demo.config.DataSourceContextHolder;
-import com.example.demo.config.DataSourceEnum;
+import com.example.demo.config.datasource.DataSourceContextHolder;
+import com.example.demo.config.datasource.DataSourceEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

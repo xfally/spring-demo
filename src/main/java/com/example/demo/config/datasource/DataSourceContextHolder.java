@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.config.datasource;
 
 /**
  * 存放当前的数据源值

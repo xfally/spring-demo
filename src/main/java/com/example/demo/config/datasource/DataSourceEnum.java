@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.config.datasource;
 
 import lombok.Getter;
 import lombok.ToString;

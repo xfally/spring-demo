@@ -11,9 +11,9 @@ services:
       - ~/data/docker/mysql-3306/conf.d:/etc/mysql/conf.d
       - ~/data/docker/mysql-3306/data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: '123456'
-      MYSQL_USER: 'test'
-      MYSQL_PASSWORD: '123456'
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_USER: test
+      MYSQL_PASSWORD: 123456
     restart: 'no'
 
   demo-postgres:
@@ -49,8 +49,8 @@ services:
     volumes:
       - ~/data/docker/rabbitmq-5672:/var/lib/rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: 'admin'
-      RABBITMQ_DEFAULT_PASS: 'admin'
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
     restart: 'no'
 
   demo-eureka:

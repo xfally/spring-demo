@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,8 @@ import java.net.UnknownHostException;
 @Controller
 @RequestMapping("/")
 public class MainController {
+    @Value("${server.ip}")
+    private String ip;
     @Value("${server.port}")
     private String port;
     @Value("${spring.rabbitmq.host}")
@@ -47,8 +50,10 @@ public class MainController {
     @GetMapping("/tip")
     @ResponseBody
     public String tip() throws UnknownHostException {
-        InetAddress address = InetAddress.getLocalHost();
-        String ip = address.getHostAddress();
+        if (StringUtils.isBlank(ip)) {
+            InetAddress address = InetAddress.getLocalHost();
+            ip = address.getHostAddress();
+        }
         String swaggerUrl = "http://" + ip + ":" + port + "/swagger-ui.html";
         String actuatorUrl = "http://" + ip + ":" + port + "/actuator";
         String druidUrl = "http://" + ip + ":" + port + "/druid";

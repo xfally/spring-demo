@@ -4,10 +4,10 @@ services:
   demo-mysql:
     container_name: demo-mysql-3306
     image: mysql:8.0.21
-    network_mode: bridge
     ports:
       - 3306:3306
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ~/data/docker/mysql-3306/conf.d:/etc/mysql/conf.d
       - ~/data/docker/mysql-3306/data:/var/lib/mysql
     environment:
@@ -19,10 +19,10 @@ services:
   demo-postgres:
     container_name: demo-postgres-5432
     image: postgres:10.13
-    network_mode: bridge
     ports:
       - 5432:5432
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ~/data/docker/postgres-5432/data:/var/lib/postgresql/data
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
@@ -30,23 +30,37 @@ services:
       POSTGRES_PASSWORD: 123456
     restart: 'no'
 
+  demo-mongo:
+    container_name: demo-mongo-27017
+    image: mongo:4.2.9
+    ports:
+      - 27017:27017
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ~/data/docker/mongo-27017/data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+    restart: 'no'
+
   demo-redis:
     container_name: demo-redis-6379
     image: redis:6.0.5
-    network_mode: bridge
     ports:
       - 6379:6379
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
     restart: 'no'
 
   demo-rabbitmq:
     container_name: demo-rabbitmq-5672
     image: rabbitmq:management
     hostname: localhost
-    network_mode: bridge
     ports:
       - 5672:5672
       - 15672:15672
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ~/data/docker/rabbitmq-5672:/var/lib/rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: admin
@@ -56,17 +70,19 @@ services:
   demo-eureka:
     container_name: demo-eureka-7001
     image: xfally/eureka:latest
-    network_mode: bridge
     ports:
       - 7001:7001
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
     restart: 'no'
 
   demo-keycloak:
     container_name: demo-keycloak-18080
     image: jboss/keycloak:11.0.1
-    network_mode: bridge
     ports:
       - 18080:8080
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
     environment:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
@@ -75,10 +91,10 @@ services:
   demo-spring:
     container_name: demo-spring-8080
     image: xfally/demo:latest
-    network_mode: bridge
     ports:
       - 8080:8080
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ~/data/docker/spring-demo-8080/config:/config
     restart: 'no'
     depends_on:
@@ -89,3 +105,6 @@ services:
       - demo-eureka
       - demo-keycloak
 
+networks:
+  default:
+    driver: bridge

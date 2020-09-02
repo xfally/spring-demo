@@ -33,6 +33,8 @@ public class MainController {
     private String rabbitmqPort;
     @Value("${eureka.address}")
     private String eurekaAddress;
+    @Value("${keycloak.auth-server-url}")
+    private String keycloakUrl;
 
     @ApiOperation("主页")
     @GetMapping("/index")
@@ -61,15 +63,17 @@ public class MainController {
         String eurekaUrl = "http://" + eurekaAddress;
         return String.format("可以访问以下内容：<br>" +
                 "接口测试（Swagger2）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
-                "服务" +
-                "监控（Actuator）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
+                "服务监控（Actuator）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
                 "数据库请求监控（Druid）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
                 "消息队列中间件（RabbitMQ）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
-                "服务治理（Eureka）: <a href=\"%s\" target=\"_blank\">%s</a><br>",
+                "服务治理（Eureka）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
+                "单点登录服务（Keycloak）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
+                "（登录后想登出，请访问单点登录服务的后台管理页面，在Sessions板块进行操作。）",
             swaggerUrl, swaggerUrl,
             actuatorUrl, actuatorUrl,
             druidUrl, druidUrl,
             rabbitmqUrl, rabbitmqUrl,
-            eurekaUrl, eurekaUrl);
+            eurekaUrl, eurekaUrl,
+            keycloakUrl, keycloakUrl);
     }
 }

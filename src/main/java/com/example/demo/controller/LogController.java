@@ -53,8 +53,9 @@ public class LogController {
     @ApiOperation("分页查询日志信息")
     @PostMapping("query")
     public UnifiedPage<LogOutVO> queryLogs(@ApiParam(value = "统一查询条件") @RequestBody @Valid @NotNull UnifiedQuery unifiedQuery,
-                                           @ApiParam(value = "查询条件：日志名") @RequestParam(required = false) @Valid String name) {
-        UnifiedPage<LogDO> page = logService.queryLogs(unifiedQuery, name);
+                                           @ApiParam(value = "查询条件：日志名") @RequestParam(required = false) @Valid String name,
+                                           @ApiParam(value = "查询条件：日志等级") @RequestParam(required = false) @Valid String level) {
+        UnifiedPage<LogDO> page = logService.queryLogs(unifiedQuery, name, level);
         List<LogOutVO> logOutVOList = page.getRecords()
             .stream()
             .map(LogOutVO::of)

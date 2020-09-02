@@ -19,6 +19,7 @@ public interface ILogService {
 
 
     UnifiedPage<LogDO> queryLogs(UnifiedQuery unifiedQuery,
+                                 String name,
                                  String level);
 
     LogDO saveLog(LogDO logDO);

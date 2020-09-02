@@ -57,19 +57,25 @@ public class LogServiceImpl implements ILogService {
     @Override
     // 因为有搜索条件，命中率低，不采用缓存
     public UnifiedPage<LogDO> queryLogs(UnifiedQuery unifiedQuery,
+                                        String name,
                                         String level) {
         if (unifiedQuery.getCurrent() <= 0) {
             unifiedQuery.setCurrent(1);
         }
         Pageable pageable = PageRequest.of(unifiedQuery.getCurrent() - 1, unifiedQuery.getSize());
         Page<LogDO> page;
-        if (!StringUtils.isBlank(level)) {
+        if (StringUtils.isBlank(name) && StringUtils.isBlank(level)) {
+            page = logRepository.findAll(pageable);
+        } else {
             LogDO logDO = new LogDO();
-            logDO.setLevel(level);
+            if (!StringUtils.isBlank(name)) {
+                logDO.setName(name);
+            }
+            if (!StringUtils.isBlank(level)) {
+                logDO.setLevel(level);
+            }
             Example<LogDO> example = Example.of(logDO);
             page = logRepository.findAll(example, pageable);
-        } else {
-            page = logRepository.findAll(pageable);
         }
         UnifiedPage<LogDO> unifiedPage = UnifiedPage.ofJpa(page);
         unifiedPage.setCurrent(unifiedPage.getCurrent() + 1);

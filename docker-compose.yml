@@ -86,7 +86,17 @@ services:
     environment:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
-      restart: "no"
+      DB_VENDOR: mysql
+      DB_ADDR: mysql
+      DB_PORT: 3306
+      DB_DATABASE: keycloak
+      DB_USER: root
+      DB_PASSWORD: 123456
+    restart: "no"
+    depends_on:
+      - demo-mysql
+    links:
+      - demo-mysql:mysql
 
   demo-spring:
     container_name: demo-spring-8080

@@ -28,6 +28,7 @@
 ├── demo.iml                                          // IDE工程配置文件，这里个人用的IDE是IDEA
 ├── docker-compose.yml                                // docker-compose配置
 ├── Dockerfile                                        // docker配置
+├── keycloak                                          // SSO服务
 ├── log
 │   └── demo.log
 ├── pom.xml                                           // maven工程配置
@@ -77,4 +78,6 @@
 4. 当项目规模非常大时，则应考虑拆分为多个微服务；（注意此时需考虑数据库分库或共享问题）
 5. 本项目给了多数据源如何配置连接的示例，如ds1、ds2，通常业务不会涉及这种场景，可删除ds2与相关aspect拦截配置；
 6. 本项目默认启用了redis查询结果缓存（application.properties中可设置被动的自动过期清理时间）并主动使用`@CacheEvict`小心地剔除脏数据;
-7. 考虑到尽量简单处理最少的实体类，本项目建议controller层使用VO，service和dao使用DO。
+7. 考虑到尽量简单处理最少的实体类，本项目建议controller层使用VO，service和dao使用DO；
+8. 本项目application.properties默认启用外部SSO服务（keycloak），若以项目预置的docker-compose方式运行，需外挂数据库，可参考keycloak目录下的数据库创建脚本，先创建其所需数据库。
+

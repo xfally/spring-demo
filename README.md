@@ -71,7 +71,7 @@
 
 ## 二次开发建议
 
-0. 将各处demo关键字或文件名，修改为具体项目的英文名；
+0. 将各处`demo`关键字、文件名以及包路径，修改为具体项目的英文名；
 1. 根据需要裁剪或调整pom.xml、application.properties、Dockerfile、docker-compose.yml等配置文件；
 2. 本项目默认采用Mybatis-Plus映射ORM（想使用JPA，请切换到dev-jpa分支），可运行`tool/MybatisPlusGenerator.java`自动生产DAO层以及相关业务代码（controller、service、mapper、entity...）；
 3. 当项目规模增大后，可以考虑按功能模块拆分，每个模块都包含controller、service、DAO等；（注意此时需要将“第3点”产生的文件，手动移动到对应模块的包路径下）

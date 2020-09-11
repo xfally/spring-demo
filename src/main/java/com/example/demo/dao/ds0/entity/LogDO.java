@@ -27,7 +27,7 @@ public class LogDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // mongodb不支持Long型主键，推荐用String或BigInteger
+    // mongodb不支持Long型主键，而使用ObjectId进行CRUD又不友好，故推荐用String或BigInteger
     // 参考 https://docs.spring.io/spring-data/data-mongo/docs/1.7.0.M1/reference/html/#mongo-template.id-handling
     @ApiModelProperty(value = "日志ID")
     @Id

@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 /**
  * MongoDB配置
@@ -11,8 +12,8 @@ import org.springframework.data.mongodb.MongoTransactionManager;
  * @author pax
  * @since 2020-09-11
  */
-// MongoDB只有启用集群，才能支持事务特性。
-//@Configuration
+@Configuration
+@EnableMongoRepositories(basePackages = "com.example.demo.dao.ds0.repository")
 public class MongoConfig {
     @Bean
     MongoTransactionManager transactionManager(MongoDbFactory factory) {

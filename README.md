@@ -19,12 +19,6 @@
 ```
 .
 ├── db                                                // 数据库脚本（DDL）
-│   ├── db1-create-data.sql
-│   ├── db1-create-db.sql
-│   ├── db1-create-schema.sql
-│   ├── db2-create-data.sql
-│   ├── db2-create-db.sql
-│   └── db2-create-schema.sql
 ├── demo.iml                                          // IDE工程配置文件，这里个人用的IDE是IDEA
 ├── docker-compose.yml                                // docker-compose配置
 ├── Dockerfile                                        // docker配置
@@ -75,12 +69,12 @@
 1. 根据需要裁剪或调整pom.xml、application.properties、Dockerfile、docker-compose.yml等配置文件；
 2. 针对RDB（如MySQL、PostgresDB），本项目默认采用Mybatis-Plus映射ORM（想使用JPA，请切换到dev-jpa分支），可运行`tool/MybatisPlusGenerator.java`自动生产DAO层以及相关业务代码（controller、service、mapper、entity...）；
 3. 针对NoSQL（如MongoDB），本项目默认采用JPA映射ORM；
-4. 由于MongoDB需要启用集群（如一主一从），才能支持事务回滚，故暂时禁用MongoConfig事务配置；
+4. 由于MongoDB需要启用集群，才能支持事务回滚，故项目预置的docker-compose.yml启用了“复制集”集群，详见HOWTO-mongo-rs.md文档说明；
 5. 当项目规模增大后，可以考虑按功能模块拆分，每个模块都包含controller、service、DAO等；（注意此时需要将“第3点”产生的文件，手动移动到对应模块的包路径下）
 6. 当项目规模非常大时，则应考虑拆分为多个微服务；（注意此时需考虑数据库分库或共享问题）
-7. 本项目给了多数据源如何配置连接的示例，如ds1、ds2，通常业务不会涉及这种场景，可删除ds2与相关aspect拦截配置；
+7. 本项目给了多数据源如何配置连接的示例，如ds1、ds2，通常业务不会涉及这种场景，可删除其中一个ds与相关aspect拦截配置；
 8. 本项目默认启用了redis查询结果缓存（application.properties中可设置被动的自动过期清理时间）并主动使用`@CacheEvict`小心地剔除脏数据;
 9. 考虑到尽量简单处理最少的实体类，本项目建议controller层使用VO，service和dao使用DO；
-10. 本项目application.properties默认启用外部SSO服务（keycloak），若以项目预置的docker-compose方式运行，需外挂数据库，可参考keycloak目录下的数据库创建脚本，先创建其所需数据库；
+10. 本项目application.properties默认启用外部SSO服务（keycloak），若以项目预置的docker-compose方式运行，需外挂数据库，可参考db/keycloak目录下的数据库创建脚本，先创建其所需数据库；
 11. 本项目keycloak默认采用credentials认证方式，请用keycloak的admin账号登录其管理员控制台页面，查看本client的secret值，然后更新application.properties中的`keycloak.credentials.secret`。
 

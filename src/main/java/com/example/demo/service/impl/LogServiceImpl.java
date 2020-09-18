@@ -83,8 +83,7 @@ public class LogServiceImpl implements ILogService {
     }
 
     @Override
-    // WARN: MongoDB只有启用集群，才能支持事务特性。
-    //@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
             @CacheEvict(value = "demoCache", key = "'log_list'", beforeInvocation = false)
@@ -100,8 +99,7 @@ public class LogServiceImpl implements ILogService {
     }
 
     @Override
-    // WARN: MongoDB只有启用集群，才能支持事务特性。
-    //@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
             @CacheEvict(value = "demoCache", key = "'log_list'", beforeInvocation = false)
@@ -117,8 +115,7 @@ public class LogServiceImpl implements ILogService {
     }
 
     @Override
-    // WARN: MongoDB只有启用集群，才能支持事务特性。
-    //@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
             @CacheEvict(value = "demoCache", key = "'log_' + #id", beforeInvocation = false),

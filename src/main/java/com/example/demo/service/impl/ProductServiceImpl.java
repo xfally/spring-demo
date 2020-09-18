@@ -39,7 +39,7 @@ public class ProductServiceImpl implements IProductService {
     private ProductRepository productRepository;
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'product_' + #id")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'product_' + #id")
     public ProductDO getProduct(@Valid @NotNull Long id) {
         Optional<ProductDO> optionalProductDO = productRepository.findById(id);
         if (!optionalProductDO.isPresent()) {
@@ -49,7 +49,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'product_list'")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'product_list'")
     public List<ProductDO> listProducts() {
         return productRepository.findAll();
     }
@@ -80,10 +80,10 @@ public class ProductServiceImpl implements IProductService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'product_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'product_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'product_' + #result.id", condition = "#result.id != 'null'")
+    @CachePut(value = "demo", key = "'product_' + #result.id", condition = "#result.id != 'null'")
     public ProductDO saveProduct(ProductDO productDO) {
         productDO.setId(null);
         productDO = productRepository.save(productDO);
@@ -96,10 +96,10 @@ public class ProductServiceImpl implements IProductService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'product_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'product_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'product_' + #result.id")
+    @CachePut(value = "demo", key = "'product_' + #result.id")
     public ProductDO updateProduct(ProductDO productDO) {
         if (!productRepository.existsById(productDO.getId())) {
             throw new UnifiedException(UnifiedCodeEnum.B1002, productDO.getId());
@@ -112,8 +112,8 @@ public class ProductServiceImpl implements IProductService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'product_' + #id", beforeInvocation = false),
-            @CacheEvict(value = "demoCache", key = "'product_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'product_' + #id", beforeInvocation = false),
+            @CacheEvict(value = "demo", key = "'product_list'", beforeInvocation = false)
         }
     )
     public Boolean removeProduct(Long id) {

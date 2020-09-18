@@ -39,7 +39,7 @@ public class ColorServiceImpl implements IColorService {
     private ColorRepository colorRepository;
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'color_' + #id")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'color_' + #id")
     public ColorDO getColor(@Valid @NotNull Long id) {
         Optional<ColorDO> optionalColorDO = colorRepository.findById(id);
         if (!optionalColorDO.isPresent()) {
@@ -49,7 +49,7 @@ public class ColorServiceImpl implements IColorService {
     }
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'color_list'")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'color_list'")
     public List<ColorDO> listColors() {
         return colorRepository.findAll();
     }
@@ -80,10 +80,10 @@ public class ColorServiceImpl implements IColorService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'color_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'color_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'color_' + #result.id", condition = "#result.id != 'null'")
+    @CachePut(value = "demo", key = "'color_' + #result.id", condition = "#result.id != 'null'")
     public ColorDO saveColor(ColorDO colorDO) {
         colorDO.setId(null);
         colorDO = colorRepository.save(colorDO);
@@ -96,10 +96,10 @@ public class ColorServiceImpl implements IColorService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'color_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'color_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'color_' + #result.id")
+    @CachePut(value = "demo", key = "'color_' + #result.id")
     public ColorDO updateColor(ColorDO colorDO) {
         if (!colorRepository.existsById(colorDO.getId())) {
             throw new UnifiedException(UnifiedCodeEnum.B1004, colorDO.getId());
@@ -112,8 +112,8 @@ public class ColorServiceImpl implements IColorService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'color_' + #id", beforeInvocation = false),
-            @CacheEvict(value = "demoCache", key = "'color_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'color_' + #id", beforeInvocation = false),
+            @CacheEvict(value = "demo", key = "'color_list'", beforeInvocation = false)
         }
     )
     public Boolean removeColor(Long id) {

@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements ICustomerService {
     private CustomerRepository customerRepository;
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'customer_' + #id")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'customer_' + #id")
     public CustomerDO getCustomer(@Valid @NotNull Long id) {
         Optional<CustomerDO> optionalCustomerDO = customerRepository.findById(id);
         if (!optionalCustomerDO.isPresent()) {
@@ -49,7 +49,7 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'customer_list'")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'customer_list'")
     public List<CustomerDO> listCustomers() {
         return customerRepository.findAll();
     }
@@ -80,10 +80,10 @@ public class CustomerServiceImpl implements ICustomerService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'customer_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'customer_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'customer_' + #result.id", condition = "#result.id != 'null'")
+    @CachePut(value = "demo", key = "'customer_' + #result.id", condition = "#result.id != 'null'")
     public CustomerDO saveCustomer(CustomerDO customerDO) {
         customerDO.setId(null);
         customerDO = customerRepository.save(customerDO);
@@ -96,10 +96,10 @@ public class CustomerServiceImpl implements ICustomerService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'customer_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'customer_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'customer_' + #result.id")
+    @CachePut(value = "demo", key = "'customer_' + #result.id")
     public CustomerDO updateCustomer(CustomerDO customerDO) {
         if (!customerRepository.existsById(customerDO.getId())) {
             throw new UnifiedException(UnifiedCodeEnum.B1001, customerDO.getId());
@@ -112,8 +112,8 @@ public class CustomerServiceImpl implements ICustomerService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'customer_' + #id", beforeInvocation = false),
-            @CacheEvict(value = "demoCache", key = "'customer_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'customer_' + #id", beforeInvocation = false),
+            @CacheEvict(value = "demo", key = "'customer_list'", beforeInvocation = false)
         }
     )
     public Boolean removeCustomer(Long id) {

@@ -37,7 +37,7 @@ public class OrderServiceImpl implements IOrderService {
     private OrderRepository orderRepository;
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'order_' + #id")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'order_' + #id")
     public OrderDO getOrder(@Valid @NotNull Long id) {
         Optional<OrderDO> optionalOrderDO = orderRepository.findById(id);
         if (!optionalOrderDO.isPresent()) {
@@ -47,7 +47,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'order_list'")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'order_list'")
     public List<OrderDO> listOrders() {
         return orderRepository.findAll();
     }
@@ -69,10 +69,10 @@ public class OrderServiceImpl implements IOrderService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'order_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'order_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'order_' + #result.id", condition = "#result.id != 'null'")
+    @CachePut(value = "demo", key = "'order_' + #result.id", condition = "#result.id != 'null'")
     public OrderDO saveOrder(OrderDO orderDO) {
         orderDO.setId(null);
         orderDO = orderRepository.save(orderDO);
@@ -85,10 +85,10 @@ public class OrderServiceImpl implements IOrderService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'order_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'order_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'order_' + #result.id")
+    @CachePut(value = "demo", key = "'order_' + #result.id")
     public OrderDO updateOrder(OrderDO orderDO) {
         Optional<OrderDO> optionalOrderDO = orderRepository.findById(orderDO.getId());
         if (!optionalOrderDO.isPresent()) {
@@ -109,8 +109,8 @@ public class OrderServiceImpl implements IOrderService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'order_' + #id", beforeInvocation = false),
-            @CacheEvict(value = "demoCache", key = "'order_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'order_' + #id", beforeInvocation = false),
+            @CacheEvict(value = "demo", key = "'order_list'", beforeInvocation = false)
         }
     )
     public Boolean removeOrder(Long id) {

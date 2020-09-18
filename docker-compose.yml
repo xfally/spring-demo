@@ -1,9 +1,13 @@
 version: '3'
 services:
 
-  demo-mysql:
-    container_name: demo-mysql-3306
+  mysql:
+    container_name: mysql-3306
     image: mysql:8.0.21
+    networks:
+      default:
+        aliases:
+          - mysql-server
     ports:
       - 3306:3306
     volumes:
@@ -16,9 +20,13 @@ services:
       MYSQL_PASSWORD: 123456
     restart: 'no'
 
-  demo-postgres:
-    container_name: demo-postgres-5432
+  postgres:
+    container_name: postgres-5432
     image: postgres:10.13
+    networks:
+      default:
+        aliases:
+          - postgres-server
     ports:
       - 5432:5432
     volumes:
@@ -30,32 +38,104 @@ services:
       POSTGRES_PASSWORD: 123456
     restart: 'no'
 
-  demo-mongo:
-    container_name: demo-mongo-27017
+  mongo-primary:
+    container_name: mongo-primary-27017
     image: mongo:4.2.9
+    networks:
+      default:
+        aliases:
+          - mongo-primary-server
     ports:
       - 27017:27017
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ~/data/docker/mongo-27017/data:/data/db
+      - ~/data/docker/mongo-27017/configdb:/data/configdb
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 123456
+    command: mongod --dbpath /data/db --bind_ip_all --replSet "rs0" --keyFile /data/configdb/keyfile
+    entrypoint:
+      - bash
+      - -c
+      - |
+        chmod 400 /data/configdb/keyfile
+        chown 999:999 /data/configdb/keyfile
+        exec docker-entrypoint.sh $$@
     restart: 'no'
 
-  demo-redis:
-    container_name: demo-redis-6379
+  mongo-arbiter:
+    container_name: mongo-arbiter-27018
+    image: mongo:4.2.9
+    networks:
+      default:
+        aliases:
+          - mongo-arbiter-server
+    ports:
+      - 27018:27017
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ~/data/docker/mongo-27018/data:/data/db
+      - ~/data/docker/mongo-27018/configdb:/data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+    command: mongod --dbpath /data/db --bind_ip_all --replSet "rs0" --keyFile /data/configdb/keyfile
+    entrypoint:
+      - bash
+      - -c
+      - |
+        chmod 400 /data/configdb/keyfile
+        chown 999:999 /data/configdb/keyfile
+        exec docker-entrypoint.sh $$@
+    restart: 'no'
+
+  mongo-secondary:
+    container_name: mongo-secondary-27019
+    image: mongo:4.2.9
+    networks:
+      default:
+        aliases:
+          - mongo-secondary-server
+    ports:
+      - 27019:27017
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ~/data/docker/mongo-27019/data:/data/db
+      - ~/data/docker/mongo-27019/configdb:/data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+    command: mongod --dbpath /data/db --bind_ip_all --replSet "rs0" --keyFile /data/configdb/keyfile
+    entrypoint:
+      - bash
+      - -c
+      - |
+        chmod 400 /data/configdb/keyfile
+        chown 999:999 /data/configdb/keyfile
+        exec docker-entrypoint.sh $$@
+    restart: 'no'
+
+  redis:
+    container_name: redis-6379
     image: redis:6.0.5
+    networks:
+      default:
+        aliases:
+          - redis-server
     ports:
       - 6379:6379
     volumes:
       - /etc/localtime:/etc/localtime:ro
     restart: 'no'
 
-  demo-rabbitmq:
-    container_name: demo-rabbitmq-5672
+  rabbitmq:
+    container_name: rabbitmq-5672
     image: rabbitmq:management
-    hostname: localhost
+    networks:
+      default:
+        aliases:
+          - rabbitmq-server
     ports:
       - 5672:5672
       - 15672:15672
@@ -67,18 +147,26 @@ services:
       RABBITMQ_DEFAULT_PASS: admin
     restart: 'no'
 
-  demo-eureka:
-    container_name: demo-eureka-7001
+  eureka:
+    container_name: eureka-7001
     image: xfally/eureka:latest
+    networks:
+      default:
+        aliases:
+          - eureka-server
     ports:
       - 7001:7001
     volumes:
       - /etc/localtime:/etc/localtime:ro
     restart: 'no'
 
-  demo-keycloak:
-    container_name: demo-keycloak-18080
+  keycloak:
+    container_name: keycloak-18080
     image: jboss/keycloak:11.0.1
+    networks:
+      default:
+        aliases:
+          - keycloak-server
     ports:
       - 18080:8080
     volumes:
@@ -87,33 +175,38 @@ services:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
       DB_VENDOR: mysql
-      DB_ADDR: mysql
+      DB_ADDR: mysql-server
       DB_PORT: 3306
       DB_DATABASE: keycloak
       DB_USER: root
       DB_PASSWORD: 123456
     restart: "no"
     depends_on:
-      - demo-mysql
-    links:
-      - demo-mysql:mysql
+      - mysql
 
-  demo-spring:
-    container_name: demo-spring-8080
+  demo:
+    container_name: demo-8080
     image: xfally/demo:latest
+    networks:
+      default:
+        aliases:
+          - demo-server
     ports:
       - 8080:8080
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ~/data/docker/spring-demo-8080/config:/config
+      - ~/data/docker/demo-8080/config:/config
     restart: 'no'
     depends_on:
-      - demo-mysql
-      - demo-postgres
-      - demo-redis
-      - demo-rabbitmq
-      - demo-eureka
-      - demo-keycloak
+      - mysql
+      - postgres
+      - mongo-primary
+      - mongo-arbiter
+      - mongo-secondary
+      - redis
+      - rabbitmq
+      - eureka
+      - keycloak
 
 networks:
   default:

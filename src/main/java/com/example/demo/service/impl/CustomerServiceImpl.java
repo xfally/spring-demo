@@ -35,7 +35,7 @@ import java.util.List;
 public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, CustomerDO> implements ICustomerService {
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'customer_' + #id")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'customer_' + #id")
     public CustomerDO getCustomer(@Valid @NotNull Long id) {
         CustomerDO customerDO = getById(id);
         if (customerDO == null) {
@@ -45,7 +45,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, CustomerDO>
     }
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'customer_list'")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'customer_list'")
     public List<CustomerDO> listCustomers() {
         List<CustomerDO> customerDOList = list();
         if (customerDOList == null) {
@@ -74,10 +74,10 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, CustomerDO>
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'customer_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'customer_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'customer_' + #result.id", condition = "#result.id != 'null'")
+    @CachePut(value = "demo", key = "'customer_' + #result.id", condition = "#result.id != 'null'")
     public CustomerDO saveCustomer(CustomerDO customerDO) {
         save(customerDO);
         // 测试事务回滚，查看数据库以验证效果
@@ -89,10 +89,10 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, CustomerDO>
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'customer_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'customer_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'customer_' + #result.id")
+    @CachePut(value = "demo", key = "'customer_' + #result.id")
     public CustomerDO updateCustomer(CustomerDO customerDO) {
         if (getById(customerDO.getId()) == null) {
             throw new UnifiedException(UnifiedCodeEnum.B1001, customerDO.getId());
@@ -105,8 +105,8 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, CustomerDO>
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'customer_' + #id", beforeInvocation = false),
-            @CacheEvict(value = "demoCache", key = "'customer_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'customer_' + #id", beforeInvocation = false),
+            @CacheEvict(value = "demo", key = "'customer_list'", beforeInvocation = false)
         }
     )
     public Boolean removeCustomer(Long id) {

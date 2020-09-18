@@ -35,7 +35,7 @@ import java.util.List;
 public class ColorServiceImpl extends ServiceImpl<ColorMapper, ColorDO> implements IColorService {
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'color_' + #id")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'color_' + #id")
     public ColorDO getColor(@Valid @NotNull Long id) {
         ColorDO colorDO = getById(id);
         if (colorDO == null) {
@@ -45,7 +45,7 @@ public class ColorServiceImpl extends ServiceImpl<ColorMapper, ColorDO> implemen
     }
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'color_list'")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'color_list'")
     public List<ColorDO> listColors() {
         List<ColorDO> colorDOList = list();
         if (colorDOList == null) {
@@ -74,10 +74,10 @@ public class ColorServiceImpl extends ServiceImpl<ColorMapper, ColorDO> implemen
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'color_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'color_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'color_' + #result.id", condition = "#result.id != 'null'")
+    @CachePut(value = "demo", key = "'color_' + #result.id", condition = "#result.id != 'null'")
     public ColorDO saveColor(ColorDO colorDO) {
         colorDO.setId(null);
         save(colorDO);
@@ -90,10 +90,10 @@ public class ColorServiceImpl extends ServiceImpl<ColorMapper, ColorDO> implemen
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'color_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'color_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'color_' + #result.id")
+    @CachePut(value = "demo", key = "'color_' + #result.id")
     public ColorDO updateColor(ColorDO colorDO) {
         if (getById(colorDO.getId()) == null) {
             throw new UnifiedException(UnifiedCodeEnum.B1004, colorDO.getId());
@@ -106,8 +106,8 @@ public class ColorServiceImpl extends ServiceImpl<ColorMapper, ColorDO> implemen
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'color_' + #id", beforeInvocation = false),
-            @CacheEvict(value = "demoCache", key = "'color_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'color_' + #id", beforeInvocation = false),
+            @CacheEvict(value = "demo", key = "'color_list'", beforeInvocation = false)
         }
     )
     public Boolean removeColor(Long id) {

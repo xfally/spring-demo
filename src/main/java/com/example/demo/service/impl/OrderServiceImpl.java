@@ -33,7 +33,7 @@ import java.util.List;
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderDO> implements IOrderService {
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'order_' + #id")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'order_' + #id")
     public OrderDO getOrder(@Valid @NotNull Long id) {
         OrderDO orderDO = getById(id);
         if (orderDO == null) {
@@ -43,7 +43,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderDO> implemen
     }
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'order_list'")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'order_list'")
     public List<OrderDO> listOrders() {
         List<OrderDO> orderDOList = list();
         if (orderDOList == null) {
@@ -63,10 +63,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderDO> implemen
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'order_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'order_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'order_' + #result.id", condition = "#result.id != 'null'")
+    @CachePut(value = "demo", key = "'order_' + #result.id", condition = "#result.id != 'null'")
     public OrderDO saveOrder(OrderDO orderDO) {
         save(orderDO);
         // 测试事务回滚，查看数据库以验证效果
@@ -78,10 +78,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderDO> implemen
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'order_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'order_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'order_' + #result.id")
+    @CachePut(value = "demo", key = "'order_' + #result.id")
     public OrderDO updateOrder(OrderDO orderDO) {
         OrderDO orderDO1 = getById(orderDO.getId());
         if (orderDO1 == null) {
@@ -101,8 +101,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderDO> implemen
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'order_' + #id", beforeInvocation = false),
-            @CacheEvict(value = "demoCache", key = "'order_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'order_' + #id", beforeInvocation = false),
+            @CacheEvict(value = "demo", key = "'order_list'", beforeInvocation = false)
         }
     )
     public Boolean removeOrder(Long id) {

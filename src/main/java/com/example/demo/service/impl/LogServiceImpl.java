@@ -39,7 +39,7 @@ public class LogServiceImpl implements ILogService {
     private LogRepository logRepository;
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'log_' + #id")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'log_' + #id")
     public LogDO getLog(@Valid @NotNull String id) {
         Optional<LogDO> optionalLogDO = logRepository.findById(id);
         if (!optionalLogDO.isPresent()) {
@@ -49,7 +49,7 @@ public class LogServiceImpl implements ILogService {
     }
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'log_list'")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'log_list'")
     public List<LogDO> listLogs() {
         return logRepository.findAll();
     }
@@ -86,10 +86,10 @@ public class LogServiceImpl implements ILogService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'log_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'log_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'log_' + #result.id", condition = "#result.id != 'null'")
+    @CachePut(value = "demo", key = "'log_' + #result.id", condition = "#result.id != 'null'")
     public LogDO saveLog(LogDO logDO) {
         logDO.setId(null);
         logDO = logRepository.save(logDO);
@@ -102,10 +102,10 @@ public class LogServiceImpl implements ILogService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'log_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'log_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'log_' + #result.id")
+    @CachePut(value = "demo", key = "'log_' + #result.id")
     public LogDO updateLog(LogDO logDO) {
         if (!logRepository.existsById(logDO.getId())) {
             throw new UnifiedException(UnifiedCodeEnum.B1005, logDO.getId());
@@ -118,8 +118,8 @@ public class LogServiceImpl implements ILogService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'log_' + #id", beforeInvocation = false),
-            @CacheEvict(value = "demoCache", key = "'log_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'log_' + #id", beforeInvocation = false),
+            @CacheEvict(value = "demo", key = "'log_list'", beforeInvocation = false)
         }
     )
     public Boolean removeLog(String id) {

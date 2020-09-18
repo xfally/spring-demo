@@ -35,7 +35,7 @@ import java.util.List;
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductDO> implements IProductService {
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'product_' + #id")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'product_' + #id")
     public ProductDO getProduct(@Valid @NotNull Long id) {
         ProductDO productDO = getById(id);
         if (productDO == null) {
@@ -45,7 +45,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductDO> im
     }
 
     @Override
-    @Cacheable(value = "demoCache", condition = "#result != 'null'", key = "'product_list'")
+    @Cacheable(value = "demo", condition = "#result != 'null'", key = "'product_list'")
     public List<ProductDO> listProducts() {
         List<ProductDO> productDOList = list();
         if (productDOList == null) {
@@ -74,10 +74,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductDO> im
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'product_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'product_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'product_' + #result.id", condition = "#result.id != 'null'")
+    @CachePut(value = "demo", key = "'product_' + #result.id", condition = "#result.id != 'null'")
     public ProductDO saveProduct(ProductDO productDO) {
         save(productDO);
         // 测试事务回滚，查看数据库以验证效果
@@ -89,10 +89,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductDO> im
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'product_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'product_list'", beforeInvocation = false)
         }
     )
-    @CachePut(value = "demoCache", key = "'product_' + #result.id")
+    @CachePut(value = "demo", key = "'product_' + #result.id")
     public ProductDO updateProduct(ProductDO productDO) {
         if (getById(productDO.getId()) == null) {
             throw new UnifiedException(UnifiedCodeEnum.B1002, productDO.getId());
@@ -105,8 +105,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, ProductDO> im
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false, rollbackFor = Exception.class)
     @Caching(
         evict = {
-            @CacheEvict(value = "demoCache", key = "'product_' + #id", beforeInvocation = false),
-            @CacheEvict(value = "demoCache", key = "'product_list'", beforeInvocation = false)
+            @CacheEvict(value = "demo", key = "'product_' + #id", beforeInvocation = false),
+            @CacheEvict(value = "demo", key = "'product_list'", beforeInvocation = false)
         }
     )
     public Boolean removeProduct(Long id) {

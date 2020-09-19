@@ -1,1 +1,1 @@
-CREATE DATABASE com_example_demo;
+CREATE DATABASE xfally_springdemo;

@@ -19,25 +19,25 @@
 ```
 .
 ├── db                                                // 数据库脚本（DDL）
-├── demo.iml                                          // IDE工程配置文件，这里个人用的IDE是IDEA
+├── springdemo.iml                                    // IDE工程配置文件，这里个人用的IDE是IDEA
 ├── docker-compose.yml                                // docker-compose配置
 ├── Dockerfile                                        // docker配置
 ├── keycloak                                          // SSO服务
 ├── log
-│   └── demo.log
+│   └── springdemo.log
 ├── pom.xml                                           // maven工程配置
 ├── README.md
 ├── src                                               // 源码目录
 │   ├── main
 │   │   ├── java
-│   │   │   └── com
-│   │   │       └── example
-│   │   │           └── demo
+│   │   │   └── io/github
+│   │   │       └── xfally
+│   │   │           └── springdemo
 │   │   │               ├── aspect                        // 切面（@Aspect）
 │   │   │               ├── common                        // “公共通用”模块，后续考虑独立jar包
 │   │   │               ├── config                        // 配置（@Configuration）
 │   │   │               ├── controller                    // Controller
-│   │   │               ├── DemoApplication.java          // Main主入口
+│   │   │               ├── MainApplication.java          // Main主入口
 │   │   │               ├── dao                           // DAO层，含entity和mapper
 │   │   │               ├── interceptor                   // 拦截器（HandlerInterceptor）
 │   │   │               ├── model                         // Model/VO
@@ -51,8 +51,8 @@
 │   └── test
 └── target                                            // 产物目录
     ├── classes                                           // 前后端分离后，编译时，可自动将前端页面直接拷贝到该目录下的static子目录
-    ├── demo-0.0.1-SNAPSHOT.jar
-    ├── demo-0.0.1-SNAPSHOT.jar.original
+    ├── springdemo-0.0.1-SNAPSHOT.jar
+    ├── springdemo-0.0.1-SNAPSHOT.jar.original
     ├── docker
     ├── generated-sources
     ├── generated-test-sources
@@ -63,9 +63,9 @@
 ```
 
 
-## 二次开发建议
+## 开发建议
 
-0. 将各处`demo`关键字、文件名以及包路径，修改为具体项目的英文名；
+0. 将各处`io.github.xfally.springdemo`关键字、文件名以及包路径，修改为具体项目的英文名；
 1. 根据需要裁剪或调整pom.xml、application.properties、Dockerfile、docker-compose.yml等配置文件；
 2. 针对RDB（如MySQL、PostgresDB），本项目默认采用Mybatis-Plus映射ORM（想使用JPA，请切换到dev-jpa分支），可运行`tool/MybatisPlusGenerator.java`自动生产DAO层以及相关业务代码（controller、service、mapper、entity...）；
 3. 针对NoSQL（如MongoDB），本项目默认采用JPA映射ORM；

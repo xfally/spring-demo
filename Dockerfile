@@ -1,7 +1,7 @@
 FROM java:8
 MAINTAINER pax coolwinding@gmail.com
 WORKDIR /
-COPY demo-0.3.8.jar /app.jar
+COPY springdemo-0.3.8.jar /app.jar
 # springboot会按以下顺序去寻找配置文件
 # 1. “当前目录”的/config文件夹下
 # 2. “当前目录”下

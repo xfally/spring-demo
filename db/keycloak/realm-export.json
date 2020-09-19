@@ -1,8 +1,8 @@
 {
-  "id": "demo",
-  "realm": "demo",
-  "displayName": "示例",
-  "displayNameHtml": "示例",
+  "id": "xfally",
+  "realm": "xfally",
+  "displayName": "xfally",
+  "displayNameHtml": "xfally",
   "notBefore": 1598605058,
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
@@ -50,7 +50,7 @@
         "description": "${role_offline-access}",
         "composite": false,
         "clientRole": false,
-        "containerId": "demo",
+        "containerId": "xfally",
         "attributes": {}
       },
       {
@@ -59,7 +59,7 @@
         "description": "${role_uma_authorization}",
         "composite": false,
         "clientRole": false,
-        "containerId": "demo",
+        "containerId": "xfally",
         "attributes": {}
       }
     ],
@@ -290,7 +290,7 @@
           "attributes": {}
         }
       ],
-      "demo": [
+      "xfally": [
         {
           "id": "b3f8a5ff-bbc7-474b-b469-ea573a30c27b",
           "name": "user",
@@ -434,11 +434,11 @@
     {
       "id": "66b5ea72-d002-4c29-abdd-43fe217d0aa2",
       "createdTimestamp": 1598778771705,
-      "username": "service-account-demo",
+      "username": "service-account-xfally",
       "enabled": true,
       "totp": false,
       "emailVerified": false,
-      "serviceAccountClientId": "demo",
+      "serviceAccountClientId": "xfally",
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "clientRoles": {
@@ -457,7 +457,7 @@
       "clientId": "account",
       "name": "${client_account}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/demo/account/",
+      "baseUrl": "/realms/xfally/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
@@ -468,7 +468,7 @@
         "manage-account"
       ],
       "redirectUris": [
-        "/realms/demo/account/*"
+        "/realms/xfally/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -504,14 +504,14 @@
       "clientId": "account-console",
       "name": "${client_account-console}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/demo/account/",
+      "baseUrl": "/realms/xfally/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "/realms/demo/account/*"
+        "/realms/xfally/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -634,7 +634,7 @@
     },
     {
       "id": "d8f005db-e7bc-44a1-922f-b6812d9c5111",
-      "clientId": "demo",
+      "clientId": "springdemo",
       "rootUrl": "http://192.168.101.150:8080",
       "adminUrl": "http://192.168.101.150:8080",
       "baseUrl": "",
@@ -779,14 +779,14 @@
       "clientId": "security-admin-console",
       "name": "${client_security-admin-console}",
       "rootUrl": "${authAdminUrl}",
-      "baseUrl": "/admin/demo/console/",
+      "baseUrl": "/admin/xfally/console/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "/admin/demo/console/*"
+        "/admin/xfally/console/*"
       ],
       "webOrigins": [
         "+"

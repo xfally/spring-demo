@@ -8,15 +8,15 @@
         <version>2.2.5.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>demo</artifactId>
-    <version>0.3.8</version>
-    <name>demo</name>
+    <groupId>io.github.xfally</groupId>
+    <artifactId>springdemo</artifactId>
+    <name>xfally-springdemo</name>
+    <version>0.4.0</version>
     <description>Demo project for Spring Boot</description>
 
     <properties>
-        <namespace>xfally</namespace>
-        <author>pax</author>
+        <image-name>xfally/springdemo</image-name>
+        <image-tag>${project.version}</image-tag>
         <java.version>1.8</java.version>
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
     </properties>
@@ -111,6 +111,11 @@
             <groupId>com.spring4all</groupId>
             <artifactId>swagger-spring-boot-starter</artifactId>
             <version>1.9.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>2.0.5</version>
         </dependency>
 
         <!-- lombok -->
@@ -207,8 +212,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <imageName>${namespace}/${project.artifactId}:${project.version}</imageName>
+                    <imageName>${image-name}</imageName>
                     <imageTags>
+                        <imageTag>${image-tag}</imageTag>
                         <imageTag>latest</imageTag>
                     </imageTags>
                     <dockerDirectory>${basedir}</dockerDirectory> <!-- 指定 Dockerfile 路径-->
@@ -222,10 +228,19 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.properties</include>
+                </includes>
+            </resource>
+        </resources>
         <!--
                 <resources>
                     <resource>
-                        <directory>src/main/java/com/example/demo</directory>
+                        <directory>src/main/java/io/github/xfally/springdemo</directory>
                         <includes>
                             <include>mapper/**/*.xml</include>
                         </includes>

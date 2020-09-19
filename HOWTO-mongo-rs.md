@@ -52,4 +52,4 @@ rs.initiate(cfg);
 
 执行后，提示`{ "ok" : 1 }`，则初始化成功。可以进一步执行`rs.status()`查看配置。
 
-5. 使用mongo或客户端工具（如NoSQLBooster）连接集群测试。
+5. 使用mongo客户端或第三方工具（如NoSQLBooster）连接集群测试。

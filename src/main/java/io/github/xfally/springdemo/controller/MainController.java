@@ -56,19 +56,22 @@ public class MainController {
             InetAddress address = InetAddress.getLocalHost();
             ip = address.getHostAddress();
         }
+        String knife4jUrl = "http://" + ip + ":" + port + "/doc.html";
         String swaggerUrl = "http://" + ip + ":" + port + "/swagger-ui.html";
         String actuatorUrl = "http://" + ip + ":" + port + "/actuator";
         String druidUrl = "http://" + ip + ":" + port + "/druid";
         String rabbitmqUrl = "http://" + rabbitmqHost + ":" + rabbitmqPort;
         String eurekaUrl = "http://" + eurekaAddress;
         return String.format("可以访问以下内容：<br>" +
-                "接口测试（Swagger2）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
-                "服务监控（Actuator）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
-                "数据库请求监控（Druid）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
-                "消息队列中间件（RabbitMQ）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
-                "服务治理（Eureka）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
-                "单点登录服务（Keycloak）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
-                "（登录后想登出，请访问单点登录服务的后台管理页面，在Sessions板块进行操作。）",
+                "- 接口测试（Knife4j）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
+                "- 接口测试（Swagger2）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
+                "- 服务监控（Actuator）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
+                "- 数据库请求监控（Druid）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
+                "- 消息队列中间件（RabbitMQ）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
+                "- 服务治理（Eureka）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
+                "- 单点登录服务（Keycloak）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
+                "> 登录后想登出，请访问单点登录服务的后台管理页面，在Sessions板块进行操作。由于本应用有认证缓存，故需等待一段时间后才会登录失效。",
+            knife4jUrl, knife4jUrl,
             swaggerUrl, swaggerUrl,
             actuatorUrl, actuatorUrl,
             druidUrl, druidUrl,

@@ -27,16 +27,16 @@
 ├── Dockerfile                                        // docker配置
 ├── HOWTO-mongo-rs.md                                 // HOWTO文档：如何基于docker搭建mongo集群
 ├── log
-│   └── springdemo.log
+│   └── spring-demo.log
 ├── pom.xml                                           // maven工程配置
 ├── README.md                                         // 本文档
-├── springdemo.iml                                    // IDEA工程配置文件
+├── spring-demo.iml                                    // IDEA工程配置文件
 ├── src                                               // 源码目录
 │   ├── main
 │   │   ├── java
-│   │   │   └── io/github
-│   │   │       └── xfally
-│   │   │           └── springdemo
+│   │   │   └── io/github/xfally
+│   │   │       └── spring
+│   │   │           └── demo
 │   │   │               ├── aspect                            // 切面（@Aspect）
 │   │   │               ├── common                            // “公共通用”模块，后续考虑独立jar包
 │   │   │               ├── config                            // 配置（@Configuration）
@@ -55,8 +55,8 @@
 │   └── test                                              // 测试用例
 └── target                                            // 产物目录
     ├── classes                                           // 前后端分离后，编译时，可自动将前端页面直接拷贝到该目录下的static子目录
-    ├── springdemo-0.0.1-SNAPSHOT.jar
-    ├── springdemo-0.0.1-SNAPSHOT.jar.original
+    ├── spring-demo-0.0.1-SNAPSHOT.jar
+    ├── spring-demo-0.0.1-SNAPSHOT.jar.original
     ├── docker                                            // docker打包临时目录
     ├── generated-sources
     ├── generated-test-sources
@@ -69,7 +69,7 @@
 
 ## 开发建议
 
-1. 将各处`io.github.xfally.springdemo`关键字、文件名以及包路径，修改为具体项目的英文名；
+1. 将各处`io.github.xfally.spring.demo`关键字、文件名以及包路径，修改为具体项目的英文名；
 2. 根据需要裁剪或调整pom.xml、application.properties、Dockerfile、docker-compose.yml等配置文件；
 3. 至少执行db目录下的DDL脚本，创建空数据库；
 4. 针对RDB（如MySQL、PostgresDB），本项目默认采用JPA/Hibernate映射ORM（想使用Mybatis-plus，请切换到dev-mbp分支），并在application.properties中配置了scheme自动创建；

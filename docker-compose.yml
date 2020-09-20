@@ -184,18 +184,18 @@ services:
     depends_on:
       - mysql
 
-  xfally-springdemo:
-    container_name: xfally-springdemo-8080
-    image: xfally/springdemo:latest
+  spring-demo:
+    container_name: spring-demo-8080
+    image: xfally/spring-demo:latest
     networks:
       default:
         aliases:
-          - xfally-springdemo-server
+          - spring-demo-server
     ports:
       - 8080:8080
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ~/data/docker/xfally-springdemo-8080/config:/config
+      - ~/data/docker/spring-demo-8080/config:/config
     restart: 'no'
     depends_on:
       - mysql

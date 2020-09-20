@@ -1,1 +1,1 @@
-CREATE DATABASE xfally_springdemo;
+CREATE DATABASE spring_demo;

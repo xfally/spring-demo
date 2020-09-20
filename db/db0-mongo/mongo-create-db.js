@@ -1,1 +1,1 @@
-use xfally_springdemo
+use spring_demo

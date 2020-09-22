@@ -147,19 +147,6 @@ services:
       RABBITMQ_DEFAULT_PASS: admin
     restart: 'no'
 
-  eureka:
-    container_name: eureka-7001
-    image: xfally/eureka:latest
-    networks:
-      default:
-        aliases:
-          - eureka-server
-    ports:
-      - 7001:7001
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-    restart: 'no'
-
   keycloak:
     container_name: keycloak-18080
     image: jboss/keycloak:11.0.1
@@ -184,6 +171,34 @@ services:
     depends_on:
       - mysql
 
+  spring-eureka:
+    container_name: spring-eureka-7001
+    image: xfally/spring-eureka:latest
+    networks:
+      default:
+        aliases:
+          - spring-eureka-server
+    ports:
+      - 7001:7001
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ~/data/docker/spring-eureka-7001/config:/config
+    restart: 'no'
+
+  spring-gateway:
+    container_name: spring-gateway-8000
+    image: xfally/spring-gateway:latest
+    networks:
+      default:
+        aliases:
+          - spring-gateway-server
+    ports:
+      - 8000:8000
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ~/data/docker/spring-gateway-8000/config:/config
+    restart: 'no'
+
   spring-demo:
     container_name: spring-demo-8080
     image: xfally/spring-demo:latest
@@ -205,8 +220,8 @@ services:
       - mongo-secondary
       - redis
       - rabbitmq
-      - eureka
       - keycloak
+      - spring-eureka
 
 networks:
   default:

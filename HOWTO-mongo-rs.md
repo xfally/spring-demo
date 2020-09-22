@@ -7,11 +7,11 @@
 在宿主机上执行（比如本工程根目录）：
 
 ```
-openssl rand -base64 756 > db/mongo/keyfile
+openssl rand -base64 756 > db/db0-mongo/keyfile
 chmod 400 mongodb.key
 ```
 
-然后将生成的keyfile文件`cp`到3个节点的data目录，参考docker-compose.yml文件中的配置。
+然后将生成的keyfile文件`cp`到3个节点的configdb目录，参考docker-compose.yml文件中的配置。
 
 3. 执行`docker-compose up -d`启动3个节点；
 

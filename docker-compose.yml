@@ -182,6 +182,7 @@ services:
       - 7001:7001
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ~/data/docker/spring-eureka-7001/config:/config
     restart: 'no'
 
   spring-gateway:

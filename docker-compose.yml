@@ -184,6 +184,20 @@ services:
       - /etc/localtime:/etc/localtime:ro
     restart: 'no'
 
+  spring-gateway:
+    container_name: spring-gateway-8000
+    image: xfally/spring-gateway:latest
+    networks:
+      default:
+        aliases:
+          - spring-gateway-server
+    ports:
+      - 8000:8000
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ~/data/docker/spring-gateway-8000/config:/config
+    restart: 'no'
+
   spring-demo:
     container_name: spring-demo-8080
     image: xfally/spring-demo:latest

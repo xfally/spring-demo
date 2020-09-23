@@ -23,16 +23,16 @@ import java.net.UnknownHostException;
 @Controller
 @RequestMapping("/")
 public class MainController {
+    @Value("${server.url}")
+    private String url;
     @Value("${server.ip}")
     private String ip;
     @Value("${server.port}")
     private String port;
-    @Value("${spring.rabbitmq.host}")
-    private String rabbitmqHost;
-    @Value("${spring.rabbitmq.web-port}")
-    private String rabbitmqPort;
-    @Value("${eureka.address}")
-    private String eurekaAddress;
+    @Value("${spring.rabbitmq.url}")
+    private String rabbitmqUrl;
+    @Value("${eureka.url}")
+    private String eurekaUrl;
     @Value("${keycloak.auth-server-url}")
     private String keycloakUrl;
 
@@ -52,16 +52,15 @@ public class MainController {
     @GetMapping("/tip")
     @ResponseBody
     public String tip() throws UnknownHostException {
-        if (StringUtils.isBlank(ip)) {
+        if (StringUtils.isBlank(url)) {
             InetAddress address = InetAddress.getLocalHost();
             ip = address.getHostAddress();
+            url = ip + ":" + port;
         }
-        String knife4jUrl = "http://" + ip + ":" + port + "/doc.html";
-        String swaggerUrl = "http://" + ip + ":" + port + "/swagger-ui.html";
-        String actuatorUrl = "http://" + ip + ":" + port + "/actuator";
-        String druidUrl = "http://" + ip + ":" + port + "/druid";
-        String rabbitmqUrl = "http://" + rabbitmqHost + ":" + rabbitmqPort;
-        String eurekaUrl = "http://" + eurekaAddress;
+        String knife4jUrl = url + "/doc.html";
+        String swaggerUrl = url + "/swagger-ui.html";
+        String actuatorUrl = url + "/actuator";
+        String druidUrl = url + "/druid";
         return String.format("可以访问以下内容：<br>" +
                 "- 接口测试（Knife4j）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +
                 "- 接口测试（Swagger2）: <a href=\"%s\" target=\"_blank\">%s</a><br>" +

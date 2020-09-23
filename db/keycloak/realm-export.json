@@ -779,18 +779,18 @@
     {
       "id": "2c7e6634-de99-4ab7-92f8-e17ee32f4491",
       "clientId": "demo",
-      "rootUrl": "http://localhost:8080",
-      "adminUrl": "http://localhost:8080",
+      "rootUrl": "http://spring-demo-server:8080",
+      "adminUrl": "http://spring-demo-server:8080",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "http://localhost:8080/*"
+        "http://spring-demo-server:8080/*"
       ],
       "webOrigins": [
-        "http://localhost:8080"
+        "http://spring-demo-server:8080"
       ],
       "notBefore": 0,
       "bearerOnly": false,

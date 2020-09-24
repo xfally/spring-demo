@@ -11,7 +11,7 @@
     <groupId>io.github.xfally</groupId>
     <artifactId>spring-demo</artifactId>
     <name>spring-demo</name>
-    <version>0.5.1</version>
+    <version>0.5.2</version>
     <description>Demo project for Spring Boot</description>
 
     <properties>

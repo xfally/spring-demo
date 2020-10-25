@@ -12,6 +12,7 @@ services:
       - 3306:3306
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - ~/data/docker/mysql-3306/conf.d:/etc/mysql/conf.d
       - ~/data/docker/mysql-3306/data:/var/lib/mysql
     environment:
@@ -31,6 +32,7 @@ services:
       - 5432:5432
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - ~/data/docker/postgres-5432/data:/var/lib/postgresql/data
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
@@ -49,6 +51,7 @@ services:
       - 27017:27017
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - ~/data/docker/mongo-27017/data:/data/db
       - ~/data/docker/mongo-27017/configdb:/data/configdb
     environment:
@@ -75,6 +78,7 @@ services:
       - 27018:27017
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - ~/data/docker/mongo-27018/data:/data/db
       - ~/data/docker/mongo-27018/configdb:/data/configdb
     environment:
@@ -101,6 +105,7 @@ services:
       - 27019:27017
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - ~/data/docker/mongo-27019/data:/data/db
       - ~/data/docker/mongo-27019/configdb:/data/configdb
     environment:
@@ -127,6 +132,7 @@ services:
       - 6379:6379
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     restart: 'no'
 
   rabbitmq:
@@ -141,6 +147,7 @@ services:
       - 15672:15672
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - ~/data/docker/rabbitmq-5672:/var/lib/rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: admin
@@ -158,6 +165,7 @@ services:
       - 18080:8080
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     environment:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
@@ -182,6 +190,7 @@ services:
       - 7001:7001
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - ~/data/docker/spring-eureka-7001/config:/config
     restart: 'no'
 
@@ -196,6 +205,7 @@ services:
       - 8000:8000
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - ~/data/docker/spring-gateway-8000/config:/config
     restart: 'no'
 
@@ -210,6 +220,7 @@ services:
       - 8080:8080
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - ~/data/docker/spring-demo-8080/config:/config
     restart: 'no'
     depends_on:

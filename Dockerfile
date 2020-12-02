@@ -1,7 +1,7 @@
 FROM java:8
 MAINTAINER pax coolwinding@gmail.com
 WORKDIR /
-COPY spring-demo-0.5.2.jar /app.jar
+COPY spring-demo-0.5.3.jar /app.jar
 # 挂载配置目录，本地持久化
 # springboot会按以下顺序去寻找配置文件
 # 1. “当前目录”的/config文件夹下

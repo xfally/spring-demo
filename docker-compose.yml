@@ -19,6 +19,7 @@ services:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_USER: test
       MYSQL_PASSWORD: 123456
+      MYSQL_DATABASE: test
     restart: 'no'
 
   postgres:
@@ -208,6 +209,33 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - ~/data/docker/spring-gateway-8000/config:/config
     restart: 'no'
+
+  nacos:
+    container_name: nacos-8848
+    image: nacos/nacos-server:1.4.0
+    networks:
+      default:
+        aliases:
+          - nacos-server
+    ports:
+      - 8848:8848
+      - 9555:9555
+    volumes:
+      - ~/data/docker/nacos-8848/standalone-logs:/home/nacos/logs
+      #- ~/data/docker/nacos-8848/init.d/custom.properties:/home/nacos/init.d/custom.properties
+    environment:
+      NACOS_AUTH_ENABLE: 'false'
+      PREFER_HOST_MODE: hostname
+      MODE: standalone
+      SPRING_DATASOURCE_PLATFORM: mysql
+      MYSQL_SERVICE_HOST: mysql-server
+      MYSQL_SERVICE_DB_NAME: nacos
+      MYSQL_SERVICE_PORT: 3306
+      MYSQL_SERVICE_USER: root
+      MYSQL_SERVICE_PASSWORD: 123456
+    restart: 'no'
+    depends_on:
+      - mysql
 
   spring-demo:
     container_name: spring-demo-8080

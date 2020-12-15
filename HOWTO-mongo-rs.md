@@ -38,9 +38,9 @@ var cfg = {
 var cfg = {
   _id: "rs0",
   members: [
-    { _id : 0, host : "192.168.101.150:27017", "priority" : 2 },
-    { _id : 1, host : "192.168.101.150:27018", "arbiterOnly": true },
-    { _id : 2, host : "192.168.101.150:27019", "priority" : 1 }
+    { _id : 0, host : "172.17.0.1:27017", "priority" : 2 },
+    { _id : 1, host : "172.17.0.1:27018", "arbiterOnly": true },
+    { _id : 2, host : "172.17.0.1:27019", "priority" : 1 }
   ]
 };
 # 初始化

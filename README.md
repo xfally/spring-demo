@@ -72,7 +72,7 @@
 1. 将各处`io.github.xfally.spring.demo`关键字、文件名以及包路径，修改为具体项目的英文名；
 2. 根据需要裁剪或调整pom.xml、application.properties、Dockerfile、docker-compose.yml等配置文件；
 3. 至少执行db目录下的DDL脚本，创建空数据库；
-4. 针对RDB（如MySQL、PostgresDB），本项目默认采用JPA/Hibernate映射ORM（想使用Mybatis-plus，请切换到dev-mbp分支），并在application.properties中配置了scheme自动创建；
+4. 针对RDB（如MySQL、PostgresDB），本项目默认采用Mybatis-Plus映射ORM（想使用JPA，请切换到dev-jpa分支），可运行tool/MybatisPlusGenerator.java自动生产DAO层以及相关业务代码（controller、service、mapper、entity...）；
 5. 针对NoSQL（如MongoDB），本项目默认采用JPA映射ORM；
 6. 由于MongoDB需要启用集群，才能支持事务回滚，故项目预置的docker-compose.yml启用了“复制集”集群，详见HOWTO-mongo-rs.md文档说明；
 7. 由于启用了MongoDB事务机制，故JPA无法自动创建数据库中的集合，需参考mongo-create-schema.js脚本手动创建集合；

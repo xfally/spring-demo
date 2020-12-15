@@ -1,5 +1,6 @@
 package io.github.xfally.spring.demo.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.xfally.spring.demo.common.model.UnifiedPage;
 import io.github.xfally.spring.demo.common.model.UnifiedQuery;
 import io.github.xfally.spring.demo.dao.ds1.entity.ProductDO;
@@ -12,7 +13,7 @@ import java.util.List;
  * @author pax
  * @since 2020-03-19
  */
-public interface IProductService {
+public interface IProductService extends IService<ProductDO> {
     ProductDO getProduct(Long id);
 
     List<ProductDO> listProducts();

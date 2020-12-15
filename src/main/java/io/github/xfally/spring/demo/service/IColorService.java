@@ -1,5 +1,6 @@
 package io.github.xfally.spring.demo.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.xfally.spring.demo.common.model.UnifiedPage;
 import io.github.xfally.spring.demo.common.model.UnifiedQuery;
 import io.github.xfally.spring.demo.dao.ds2.entity.ColorDO;
@@ -12,7 +13,7 @@ import java.util.List;
  * @author pax
  * @since 2020-05-08
  */
-public interface IColorService {
+public interface IColorService extends IService<ColorDO> {
     ColorDO getColor(Long id);
 
     List<ColorDO> listColors();

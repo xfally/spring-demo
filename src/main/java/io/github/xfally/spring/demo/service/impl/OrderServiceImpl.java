@@ -1,20 +1,18 @@
 package io.github.xfally.spring.demo.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.xfally.spring.demo.common.model.UnifiedCodeEnum;
 import io.github.xfally.spring.demo.common.model.UnifiedPage;
 import io.github.xfally.spring.demo.common.model.UnifiedQuery;
 import io.github.xfally.spring.demo.common.response.UnifiedException;
 import io.github.xfally.spring.demo.dao.ds1.entity.OrderDO;
-import io.github.xfally.spring.demo.dao.ds1.repository.OrderRepository;
+import io.github.xfally.spring.demo.dao.ds1.mapper.OrderMapper;
 import io.github.xfally.spring.demo.service.IOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,8 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 订单信息服务实现类
@@ -32,37 +30,33 @@ import java.util.Optional;
  * @since 2020-05-08
  */
 @Service
-public class OrderServiceImpl implements IOrderService {
-    @Autowired
-    private OrderRepository orderRepository;
+public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderDO> implements IOrderService {
 
     @Override
     @Cacheable(value = "spring-demo", condition = "#result != 'null'", key = "'order_' + #id")
     public OrderDO getOrder(@Valid @NotNull Long id) {
-        Optional<OrderDO> optionalOrderDO = orderRepository.findById(id);
-        if (!optionalOrderDO.isPresent()) {
+        OrderDO orderDO = getById(id);
+        if (orderDO == null) {
             throw new UnifiedException(UnifiedCodeEnum.B1003, id);
         }
-        return optionalOrderDO.get();
+        return orderDO;
     }
 
     @Override
     @Cacheable(value = "spring-demo", condition = "#result != 'null'", key = "'order_list'")
     public List<OrderDO> listOrders() {
-        return orderRepository.findAll();
+        List<OrderDO> orderDOList = list();
+        if (orderDOList == null) {
+            return new ArrayList<>();
+        }
+        return orderDOList;
     }
 
     @Override
     // 因为有搜索条件，命中率低，不采用缓存
     public UnifiedPage<OrderDO> queryOrders(UnifiedQuery unifiedQuery) {
-        if (unifiedQuery.getCurrent() <= 0) {
-            unifiedQuery.setCurrent(1);
-        }
-        Pageable pageable = PageRequest.of(unifiedQuery.getCurrent() - 1, unifiedQuery.getSize());
-        Page<OrderDO> page = orderRepository.findAll(pageable);
-        UnifiedPage<OrderDO> unifiedPage = UnifiedPage.ofJpa(page);
-        unifiedPage.setCurrent(unifiedPage.getCurrent() + 1);
-        return unifiedPage;
+        Page<OrderDO> page = page(new Page<>(unifiedQuery.getCurrent(), unifiedQuery.getSize()));
+        return UnifiedPage.ofMbp(page);
     }
 
     @Override
@@ -74,8 +68,7 @@ public class OrderServiceImpl implements IOrderService {
     )
     @CachePut(value = "spring-demo", key = "'order_' + #result.id", condition = "#result.id != 'null'")
     public OrderDO saveOrder(OrderDO orderDO) {
-        orderDO.setId(null);
-        orderDO = orderRepository.save(orderDO);
+        save(orderDO);
         // 测试事务回滚，查看数据库以验证效果
         //int a = 1 / 0;
         return orderDO;
@@ -90,18 +83,17 @@ public class OrderServiceImpl implements IOrderService {
     )
     @CachePut(value = "spring-demo", key = "'order_' + #result.id")
     public OrderDO updateOrder(OrderDO orderDO) {
-        Optional<OrderDO> optionalOrderDO = orderRepository.findById(orderDO.getId());
-        if (!optionalOrderDO.isPresent()) {
+        OrderDO orderDO1 = getById(orderDO.getId());
+        if (orderDO1 == null) {
             throw new UnifiedException(UnifiedCodeEnum.B1003, orderDO.getId());
         }
-        OrderDO orderDO1 = optionalOrderDO.get();
         if (orderDO.getCustomerId() == null) {
             orderDO.setCustomerId(orderDO1.getCustomerId());
         }
         if (orderDO.getProductId() == null) {
             orderDO.setProductId(orderDO1.getProductId());
         }
-        orderRepository.save(orderDO);
+        updateById(orderDO);
         return orderDO;
     }
 
@@ -114,11 +106,11 @@ public class OrderServiceImpl implements IOrderService {
         }
     )
     public Boolean removeOrder(Long id) {
-        if (!orderRepository.existsById(id)) {
+        OrderDO orderDO = getById(id);
+        if (orderDO == null) {
             throw new UnifiedException(UnifiedCodeEnum.B1003, id);
         }
-        orderRepository.deleteById(id);
-        return true;
+        return removeById(id);
     }
 
 }

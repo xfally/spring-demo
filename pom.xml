@@ -217,7 +217,7 @@
                         <imageTag>${image-tag}</imageTag>
                         <imageTag>latest</imageTag>
                     </imageTags>
-                    <dockerDirectory>${basedir}</dockerDirectory> <!-- 指定 Dockerfile 路径-->
+                    <dockerDirectory>${basedir}/docker</dockerDirectory> <!-- 指定 Dockerfile 路径-->
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>

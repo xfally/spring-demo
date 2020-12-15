@@ -19,40 +19,40 @@
 ```
 .
 ├── db                                                // 数据库脚本（DDL）
-│   ├── db0-mongo
-│   ├── db1-mysql
-│   ├── db2-postgres
-│   └── keycloak
+│   ├── db0-mongo
+│   ├── db1-mysql
+│   ├── db2-postgres
+│   └── keycloak
 ├── docker-compose.yml                                // docker-compose配置
 ├── Dockerfile                                        // docker配置
 ├── HOWTO-mongo-rs.md                                 // HOWTO文档：如何基于docker搭建mongo集群
 ├── log
-│   └── spring-demo.log
+│   └── spring-demo.log
 ├── pom.xml                                           // maven工程配置
 ├── README.md                                         // 本文档
 ├── spring-demo.iml                                    // IDEA工程配置文件
 ├── src                                               // 源码目录
-│   ├── main
-│   │   ├── java
-│   │   │   └── io/github/xfally
-│   │   │       └── spring
-│   │   │           └── demo
-│   │   │               ├── aspect                            // 切面（@Aspect）
-│   │   │               ├── common                            // “公共通用”模块，后续考虑独立jar包
-│   │   │               ├── config                            // 配置（@Configuration）
-│   │   │               ├── controller                        // Controller
-│   │   │               ├── MainApplication.java              // Main主入口
-│   │   │               ├── dao                               // DAO层，含entity和mapper
-│   │   │               ├── interceptor                       // 拦截器（HandlerInterceptor）
-│   │   │               ├── model                             // Model/VO
-│   │   │               ├── service                           // Service
-│   │   │               └── tool                              // 工具
-│   │   └── resources                                     // 资源目录
-│   │       ├── application.properties                        // springboot配置文件
-│   │       ├── log4j.properties                              // log配置
-│   │       └── static                                        // 存放页面静态资源，前后端分离后，不再直接使用该目录
-│   │           └── index.html                                    // 示例页面
-│   └── test                                              // 测试用例
+│   ├── main
+│   │   ├── java
+│   │   │   └── io/github/xfally
+│   │   │       └── spring
+│   │   │           └── demo
+│   │   │               ├── aspect                            // 切面（@Aspect）
+│   │   │               ├── common                            // “公共通用”模块，后续考虑独立jar包
+│   │   │               ├── config                            // 配置（@Configuration）
+│   │   │               ├── controller                        // Controller
+│   │   │               ├── MainApplication.java              // Main主入口
+│   │   │               ├── dao                               // DAO层，含entity和mapper
+│   │   │               ├── interceptor                       // 拦截器（HandlerInterceptor）
+│   │   │               ├── model                             // Model/VO
+│   │   │               ├── service                           // Service
+│   │   │               └── tool                              // 工具
+│   │   └── resources                                     // 资源目录
+│   │       ├── application.properties                        // springboot配置文件
+│   │       ├── log4j.properties                              // log配置
+│   │       └── static                                        // 存放页面静态资源，前后端分离后，不再直接使用该目录
+│   │           └── index.html                                    // 示例页面
+│   └── test                                              // 测试用例
 └── target                                            // 产物目录
     ├── classes                                           // 前后端分离后，编译时，可自动将前端页面直接拷贝到该目录下的static子目录
     ├── spring-demo-0.0.1-SNAPSHOT.jar
